@@ -21,7 +21,6 @@ var BRS = (function (BRS, $, undefined) {
 
             BRS.database.select("assets", null, function (error, assets) {
                 //select already bookmarked assets
-                console.log(666);
                 $.each(assets, function (index, asset) {
                     BRS.cacheAsset(asset);
                 });
@@ -314,10 +313,7 @@ var BRS = (function (BRS, $, undefined) {
     };
 
     //called on opening the asset exchange page and automatic refresh
-    console.log(9888);
     BRS.loadAssetExchangeSidebar = function (callback) {
-        console.log(9999);
-        console.log("Starting for");
         if (!BRS.assets.length) {
             BRS.pageLoaded(callback);
             $("#asset_exchange_sidebar_content").empty();
@@ -368,7 +364,6 @@ var BRS = (function (BRS, $, undefined) {
         var isSearch = BRS.assetSearch !== false;
         var searchResults = 0;
         for (var i = 0; i < BRS.assets.length; i++) {
-            console.log("index:" + i);
             var asset = BRS.assets[i];
 
             if (isSearch) {

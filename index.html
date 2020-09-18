@@ -379,7 +379,10 @@
       <section class="content-header">
         <h1 style="font-size: 20px;">Dataset Exchange</h1>
         <div style="position:absolute;top:9px;right:9px;">
-          <span type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_bookmark" data-toggle="modal"
+          <!-- asset_exchange_add_asset_bookmark -->
+          <button type="button" class="btn btn-sm btn-default" id="asset_exchange_liquidity" data-toggle="modal"
+            data-target="#issue_Liquidity_modal">Add Liquidity</button>
+          <span type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_create" data-toggle="modal"
             data-target="#issue_asset_modal">Create New Dataset</span>
           <button type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_bookmark"
             data-toggle="modal" data-target="#add_asset_bookmark_modal">Add Dataset</button>
@@ -489,10 +492,10 @@
                                 <label for="buy_asset_price" class="col-sm-3 control-label"
                                   data-i18n="price">Price</label>
                                 <div class="col-sm-9">
-                                  <div class="input-group">
-                                    <input id="buy_asset_price" type="text" value="0" name="buy_asset_price"
-                                      class="form-control" data-type="buy" />
-                                    <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
+                                  <div class="input-group" id="setValue">
+                                    <!-- <input id="buy_asset_price getValue" type="text" name="buy_asset_price" class="form-control"
+                                      data-type="buy"/>
+                                    <span class="input-group-addon">ALITA / <span class="asset_name"></span></span> -->
                                   </div>
                                 </div>
                               </div>
@@ -874,15 +877,129 @@
   <script src="js/brs.crowdfunding.js" type="text/javascript"></script>
   <script src="js/nsv.dividends.js" type="text/javascript"></script>
   <script>
+    setTimeout(function () {
+      BRS.pages.asset_exchange();
+      BRS.loadAssetExchangeSidebar();
+    }, 2000);
+  </script>
+  <script>
     (function () {
+      var $getValue = $("#getValue"),
+        $setValue = $("#setValue"),
+        str = ``;
+
       var sel = document.getElementById("add_asset_bookmark_id");
-      var url =
-        "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+      var liquidity = document.getElementById("liquidity");
+      var asset_exchange_liquidity = document.getElementById("asset_exchange_liquidity");
+      var setNameContent = document.getElementById("setNameContent");
+      var issues = document.getElementById("issues_names");
       var str = ``;
+      var dataSets=null,
+          assetsId="";
       var dataName = [],
         names = [],
         nameSort = [];
-      $.get(url, function (data) {
+      var issues_names = '',
+        content = '',
+        assetNames = '',
+        assetPasswords = '';
+      var _index = '';
+      var url = "http://127.0.0.1:3000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52";
+      var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+      var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
+      var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
+      // var url4 = "http://localhost:3000/getDatasetAddress?" + "asset=" + content;
+      asset_exchange_liquidity.style.display = "none";
+      //异步获取asset
+      setTimeout(function () {
+        var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
+          listtitle = document.querySelectorAll("#asset_exchange_sidebar_content a .list-group-item-heading");
+        Array.from(Alist).forEach((item, index) => {
+          item.onclick = function () {
+            asset_exchange_liquidity.style.display = "inline-block";
+            content = $(item).attr("data-asset");
+
+            Array.from(listtitle).forEach((res, title) => {
+              if (index == title) {
+                var temp = res.innerHTML.toUpperCase();
+                setNameContent.innerHTML = temp;
+                issues.setAttribute("placeholder", temp);
+              }
+            })
+
+            $.get("http://localhost:3000/getDatasetAddress?" + "asset=" + content, function (data) {
+              dataSets = eval('(' + data + ')');
+              assetsId=dataSets.data;
+            })
+          }
+        })
+
+      }, 3000);
+      //获取quantityQNT文本框中的值
+      $("#issues_names").bind('blur', function () {
+        issues_names = $("#issues_names").val();
+      });
+      $("#assetName").bind('blur', function () {
+        assetNames = $("#assetName").val();
+      });
+      $("#assetPassword").bind('blur', function () {
+        assetPasswords = $("#assetPassword").val();
+      });
+      //点击addliquid调用接口
+      liquidity.onclick = function () {
+        transfer(content, issues_names);
+        sendMoney(issues_names);
+      }
+
+      function transfer(val1, val2) {
+        $.ajax({
+          url: url3,
+          type: "POST",
+          dataType: "json",
+          data: {
+            asset: val1,
+            recipient: "ALITA-W9Z6-6CAJ-ZDML-59P52",
+            deadline: 1440,
+            quantityQNT: val2,
+            feeNQT: 1,
+            publicKey: "b2705d9bc67cdd685bb7af2a9ddfb3dcdb2c084112f1e8a6b536e8c7a9c3d501"
+          },
+          success: function (result) {
+            console.log(result);
+          },
+          error: function (xhr, status, p3, p4) {
+            var err = "Error " + " " + status + " " + p3;
+            if (xhr.responseText && xhr.responseText[0] == "{")
+              err = JSON.parse(xhr.responseText).message;
+            alert(err);
+          }
+        })
+      }
+
+      function sendMoney(val) {
+        $.ajax({
+          url: url2,
+          type: "POST",
+          dataType: "json",
+          data: {
+            recipient: "ALITA-W9Z6-6CAJ-ZDML-59P52",
+            deadline: 1440,
+            amountNQT: val,
+            feeNQT: 1,
+            publicKey: "b2705d9bc67cdd685bb7af2a9ddfb3dcdb2c084112f1e8a6b536e8c7a9c3d501"
+          },
+          success: function (result) {
+            console.log(result);
+          },
+          error: function (xhr, status, p3, p4) {
+            var err = "Error " + " " + status + " " + p3;
+            if (xhr.responseText && xhr.responseText[0] == "{")
+              err = JSON.parse(xhr.responseText).message;
+            alert(err);
+          }
+        })
+      }
+      $.get(url1, function (data) {
         dataName = eval('(' + data + ')').assets;
         dataName.forEach(item => {
           var opt = document.createElement('option');
@@ -892,15 +1009,21 @@
         })
       })
 
+      $.get(url, function (data) {
+        str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
+             <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
+        `;
+        $setValue.append(str);
+      })
 
     })();
   </script>
   <script>
-    setTimeout(function () {
-      console.log(666);
-      BRS.pages.asset_exchange();
-      BRS.loadAssetExchangeSidebar();
-    }, 1000);
+    (function () {
+
+
+
+    })();
   </script>
 
 </body>

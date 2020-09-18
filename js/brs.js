@@ -21,7 +21,7 @@
  * @depends {util/extensions.js}
  * @depends {util/nxtaddress.js}
  */
-var BRS = (function(BRS, $, undefined) {
+var BRS = (function (BRS, $, undefined) {
     "use strict";
 
     BRS.server = "http://wallet.alita.services:8125";
@@ -67,11 +67,10 @@ var BRS = (function(BRS, $, undefined) {
     var stateIntervalSeconds = 30;
     var isScanning = false;
 
-    BRS.init = function() {
-        if ( window.location.port === null || window.location.port.length === 0 || window.location.port !== "6876") {
+    BRS.init = function () {
+        if (window.location.port === null || window.location.port.length === 0 || window.location.port !== "6876") {
             $(".testnet_only").hide();
-        }
-        else {
+        } else {
             BRS.isTestNet = true;
             $(".testnet_only, #testnet_login, #testnet_warning").show();
         }
@@ -82,23 +81,22 @@ var BRS = (function(BRS, $, undefined) {
             BRS.hasLocalStorage = false;
         }
 
-        BRS.createDatabase(function() {
+        BRS.createDatabase(function () {
             BRS.getSettings();
         });
 
         BRS.getState(null);
         BRS.showLockscreen();
 
-        if ( BRS.getCookie("remember_passphrase") ) {
+        if (BRS.getCookie("remember_passphrase")) {
             $("#remember_password").prop("checked", true);
-            if ( BRS.hasLocalStorage ) {
+            if (BRS.hasLocalStorage) {
                 $("#remember_password_container").show();
                 var passphrase = localStorage.getItem("burst.passphrase");
-                if ( passphrase !== null && passphrase.length) {
+                if (passphrase !== null && passphrase.length) {
                     $("#login_password").val(passphrase);
                 }
-            }
-            else {
+            } else {
                 $("#remember_password_container").hide();
             }
         }
@@ -144,16 +142,16 @@ var BRS = (function(BRS, $, undefined) {
             "trigger": "hover"
         });
 
-        $("#dashboard_transactions_table, #transactions_table").on("mouseenter", "td.confirmations", function() {
+        $("#dashboard_transactions_table, #transactions_table").on("mouseenter", "td.confirmations", function () {
             $(this).popover("show");
-        }).on("mouseleave", "td.confirmations", function() {
+        }).on("mouseleave", "td.confirmations", function () {
             $(this).popover("destroy");
             $(".popover").remove();
         });
 
         _fix();
 
-        $(window).on("resize", function() {
+        $(window).on("resize", function () {
             _fix();
 
             if (BRS.currentPage === "asset_exchange") {
@@ -193,13 +191,12 @@ var BRS = (function(BRS, $, undefined) {
 
         if (content > height) {
             $(".left-side, html, body").css("min-height", content + "px");
-        }
-        else {
+        } else {
             $(".left-side, html, body").css("min-height", height + "px");
         }
     }
 
-    BRS.setStateInterval = function(seconds) {
+    BRS.setStateInterval = function (seconds) {
         if (seconds === stateIntervalSeconds && stateInterval) {
             return;
         }
@@ -210,17 +207,16 @@ var BRS = (function(BRS, $, undefined) {
 
         stateIntervalSeconds = seconds;
 
-        stateInterval = setInterval(function() {
+        stateInterval = setInterval(function () {
             BRS.getState();
         }, 1000 * seconds);
     };
 
-    BRS.getState = function(callback) {
-        BRS.sendRequest("getBlockchainStatus", function(response) {
+    BRS.getState = function (callback) {
+        BRS.sendRequest("getBlockchainStatus", function (response) {
             if (response.errorCode) {
                 //todo
-            }
-            else {
+            } else {
                 var firstTime = !("lastBlock" in BRS.state);
                 var previousLastBlock = (firstTime ? "0" : BRS.state.lastBlock);
 
@@ -229,12 +225,10 @@ var BRS = (function(BRS, $, undefined) {
                 if (firstTime) {
                     $("#brs_version, #brs_version_dashboard").html(BRS.state.version).removeClass("loading_dots");
                     BRS.getBlock(BRS.state.lastBlock, BRS.handleInitialBlocks);
-                }
-                else if (BRS.state.isScanning) {
+                } else if (BRS.state.isScanning) {
                     //do nothing but reset BRS.state so that when isScanning is done, everything is reset.
                     isScanning = true;
-                }
-                else if (isScanning) {
+                } else if (isScanning) {
                     //rescan is done, now we must reset everything...
                     isScanning = false;
                     BRS.blocks = [];
@@ -244,8 +238,7 @@ var BRS = (function(BRS, $, undefined) {
                         BRS.getInitialTransactions();
                         BRS.getAccountInfo();
                     }
-                }
-                else if (previousLastBlock !== BRS.state.lastBlock) {
+                } else if (previousLastBlock !== BRS.state.lastBlock) {
                     BRS.tempBlocks = [];
                     if (BRS.account) {
                         BRS.getAccountInfo();
@@ -254,10 +247,9 @@ var BRS = (function(BRS, $, undefined) {
                     if (BRS.account) {
                         BRS.getNewTransactions();
                     }
-                }
-                else {
+                } else {
                     if (BRS.account) {
-                        BRS.getUnconfirmedTransactions(function(unconfirmedTransactions) {
+                        BRS.getUnconfirmedTransactions(function (unconfirmedTransactions) {
                             BRS.handleIncomingTransactions(unconfirmedTransactions, false);
                         });
                     }
@@ -274,7 +266,7 @@ var BRS = (function(BRS, $, undefined) {
         });
     };
 
-    $("#logo, .sidebar-menu a").click(function(e, data) {
+    $("#logo, .sidebar-menu a").click(function (e, data) {
         if ($(this).hasClass("ignore")) {
             $(this).removeClass("ignore");
             return;
@@ -310,15 +302,13 @@ var BRS = (function(BRS, $, undefined) {
 
             if (currentActive.hasClass("treeview")) {
                 currentActive.children("a").first().addClass("ignore").click();
-            }
-            else {
+            } else {
                 currentActive.removeClass("active");
             }
 
             if ($(this).attr("id") && $(this).attr("id") == "logo") {
                 $("#dashboard_link").addClass("active");
-            }
-            else {
+            } else {
                 $(this).parent().addClass("active");
             }
         }
@@ -338,35 +328,32 @@ var BRS = (function(BRS, $, undefined) {
 
             if (data && data.callback) {
                 BRS.pages[page](data.callback);
-            }
-            else if (data) {
+            } else if (data) {
                 BRS.pages[page](data);
-            }
-            else {
+            } else {
                 BRS.pages[page]();
             }
         }
     });
 
-    $("button.goto-page, a.goto-page").click(function(event) {
+    $("button.goto-page, a.goto-page").click(function (event) {
         event.preventDefault();
 
         BRS.goToPage($(this).data("page"));
     });
 
-    BRS.loadPage = function(page, callback) {
+    BRS.loadPage = function (page, callback) {
         BRS.pageLoading();
         BRS.pages[page](callback);
     };
 
-    BRS.goToPage = function(page, callback) {
+    BRS.goToPage = function (page, callback) {
         var $link = $("ul.sidebar-menu a[data-page=" + page + "]");
 
         if ($link.length > 1) {
             if ($link.last().is(":visible")) {
                 $link = $link.last();
-            }
-            else {
+            } else {
                 $link = $link.first();
             }
         }
@@ -376,12 +363,10 @@ var BRS = (function(BRS, $, undefined) {
                 $link.trigger("click", [{
                     "callback": callback
                 }]);
-            }
-            else {
+            } else {
                 $link.trigger("click");
             }
-        }
-        else {
+        } else {
             BRS.currentPage = page;
             BRS.currentSubPage = "";
             BRS.pageNumber = 1;
@@ -397,7 +382,7 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.pageLoading = function() {
+    BRS.pageLoading = function () {
         BRS.hasMorePages = false;
 
         var $pageHeader = $("#" + BRS.currentPage + "_page .content-header h1");
@@ -405,7 +390,7 @@ var BRS = (function(BRS, $, undefined) {
         $pageHeader.append("<span class='loading_dots'><span>.</span><span>.</span><span>.</span></span>");
     };
 
-    BRS.pageLoaded = function(callback) {
+    BRS.pageLoaded = function (callback) {
         var $currentPage = $("#" + BRS.currentPage + "_page");
 
         $currentPage.find(".content-header h1 .loading_dots").remove();
@@ -419,13 +404,12 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.addPagination = function(section) {
+    BRS.addPagination = function (section) {
         var output = "";
 
         if (BRS.pageNumber === 2) {
             output += "<a href='#' data-page='1'>&laquo; " + $.t("previous_page") + "</a>";
-        }
-        else if (BRS.pageNumber > 2) {
+        } else if (BRS.pageNumber > 2) {
             //output += "<a href='#' data-page='1'>&laquo; First Page</a>";
             output += " <a href='#' data-page='" + (BRS.pageNumber - 1) + "'>&laquo; " + $.t("previous_page") + "</a>";
         }
@@ -443,13 +427,13 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    $(".data-pagination").on("click", "a", function(e) {
+    $(".data-pagination").on("click", "a", function (e) {
         e.preventDefault();
 
         BRS.goToPageNumber($(this).data("page"));
     });
 
-    BRS.goToPageNumber = function(pageNumber) {
+    BRS.goToPageNumber = function (pageNumber) {
         /*if (!pageLoaded) {
           return;
           }*/
@@ -460,7 +444,7 @@ var BRS = (function(BRS, $, undefined) {
         BRS.pages[BRS.currentPage]();
     };
 
-    BRS.createDatabase = function(callback) {
+    BRS.createDatabase = function (callback) {
         var schema = {
             contacts: {
                 id: {
@@ -499,7 +483,7 @@ var BRS = (function(BRS, $, undefined) {
         BRS.assetTableKeys = ["account", "accountRS", "asset", "description", "name", "position", "decimals", "quantityQNT", "groupName"];
 
         try {
-            BRS.database = new WebDB("BRS_USER_DB", schema, 2, 4, function(error, db) {
+            BRS.database = new WebDB("BRS_USER_DB", schema, 2, 4, function (error, db) {
                 if (!error) {
                     BRS.databaseSupport = true;
 
@@ -507,9 +491,9 @@ var BRS = (function(BRS, $, undefined) {
 
                     BRS.database.select("data", [{
                         "id": "asset_exchange_version"
-                    }], function(error, result) {
+                    }], function (error, result) {
                         if (!result || !result.length) {
-                            BRS.database.delete("assets", [], function(error, affected) {
+                            BRS.database.delete("assets", [], function (error, affected) {
                                 if (!error) {
                                     BRS.database.insert("data", {
                                         "id": "asset_exchange_version",
@@ -522,11 +506,10 @@ var BRS = (function(BRS, $, undefined) {
 
                     BRS.database.select("data", [{
                         "id": "closed_groups"
-                    }], function(error, result) {
+                    }], function (error, result) {
                         if (result && result.length) {
                             BRS.closedGroups = result[0].contents.split("#");
-                        }
-                        else {
+                        } else {
                             BRS.database.insert("data", {
                                 id: "closed_groups",
                                 contents: ""
@@ -536,8 +519,7 @@ var BRS = (function(BRS, $, undefined) {
                     if (callback) {
                         callback();
                     }
-                }
-                else if (callback) {
+                } else if (callback) {
                     callback();
                 }
             });
@@ -550,10 +532,10 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.getAccountInfo = function(firstRun, callback) {
+    BRS.getAccountInfo = function (firstRun, callback) {
         BRS.sendRequest("getAccount", {
             "account": BRS.account
-        }, function(response) {
+        }, function (response) {
             var previousAccountInfo = BRS.accountInfo;
 
             BRS.accountInfo = response;
@@ -569,32 +551,27 @@ var BRS = (function(BRS, $, undefined) {
                                 "account_id": String(BRS.accountRS).escapeHTML(),
                                 "public_key": String(BRS.publicKey).escapeHTML()
                             }) + "<br /><br />" + $.t("status_blockchain_downloading")).show();
-                        }
-                        else {
+                        } else {
                             $("#dashboard_message").addClass("alert-success").removeClass("alert-danger").html($.t("status_blockchain_downloading")).show();
                         }
-                    }
-                    else if (BRS.state && BRS.state.isScanning) {
+                    } else if (BRS.state && BRS.state.isScanning) {
                         $("#dashboard_message").addClass("alert-danger").removeClass("alert-success").html($.t("status_blockchain_rescanning")).show();
-                    }
-                    else {
+                    } else {
                         $("#dashboard_message").addClass("alert-success").removeClass("alert-danger").html($.t("status_new_account", {
                             "account_id": String(BRS.accountRS).escapeHTML(),
                             "public_key": String(BRS.publicKey).escapeHTML()
                         })).show();
                     }
-                }
-                else {
+                } else {
                     $("#dashboard_message").addClass("alert-danger").removeClass("alert-success").html(BRS.accountInfo.errorDescription ? BRS.accountInfo.errorDescription.escapeHTML() : $.t("error_unknown")).show();
                 }
-            }
-            else {
+            } else {
                 if (BRS.accountRS && BRS.accountInfo.accountRS !== BRS.accountRS) {
                     $.notify("Generated Reed Solomon address different from the one in the blockchain!", {
                         type: 'danger',
-                    offset: {
-                        x: 5,
-                        y: 60
+                        offset: {
+                            x: 5,
+                            y: 60
                         }
                     });
                     BRS.accountRS = BRS.accountInfo.accountRS;
@@ -602,14 +579,11 @@ var BRS = (function(BRS, $, undefined) {
 
                 if (BRS.downloadingBlockchain) {
                     $("#dashboard_message").addClass("alert-success").removeClass("alert-danger").html($.t("status_blockchain_downloading")).show();
-                }
-                else if (BRS.state && BRS.state.isScanning) {
+                } else if (BRS.state && BRS.state.isScanning) {
                     $("#dashboard_message").addClass("alert-danger").removeClass("alert-success").html($.t("status_blockchain_rescanning")).show();
-                }
-                else if (!BRS.accountInfo.publicKey) {
+                } else if (!BRS.accountInfo.publicKey) {
                     $("#dashboard_message").addClass("alert-danger").removeClass("alert-success").html($.t("no_public_key_warning") + " " + $.t("public_key_actions")).show();
-                }
-                else {
+                } else {
                     $("#dashboard_message").hide();
                 }
 
@@ -619,7 +593,7 @@ var BRS = (function(BRS, $, undefined) {
                 if (BRS.databaseSupport) {
                     BRS.database.select("data", [{
                         "id": "asset_balances_" + BRS.account
-                    }], function(error, asset_balance) {
+                    }], function (error, asset_balance) {
                         if (asset_balance && asset_balance.length) {
                             var previous_balances = asset_balance[0].contents;
 
@@ -632,8 +606,7 @@ var BRS = (function(BRS, $, undefined) {
                             if (previous_balances !== current_balances) {
                                 if (previous_balances !== "undefined" && typeof previous_balances !== "undefined") {
                                     previous_balances = JSON.parse(previous_balances);
-                                }
-                                else {
+                                } else {
                                     previous_balances = [];
                                 }
                                 BRS.database.update("data", {
@@ -645,16 +618,14 @@ var BRS = (function(BRS, $, undefined) {
                                     BRS.checkAssetDifferences(BRS.accountInfo.assetBalances, previous_balances);
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             BRS.database.insert("data", {
                                 id: "asset_balances_" + BRS.account,
                                 contents: JSON.stringify(BRS.accountInfo.assetBalances)
                             });
                         }
                     });
-                }
-                else if (showAssetDifference && previousAccountInfo && previousAccountInfo.assetBalances) {
+                } else if (showAssetDifference && previousAccountInfo && previousAccountInfo.assetBalances) {
                     var previousBalances = JSON.stringify(previousAccountInfo.assetBalances);
                     var currentBalances = JSON.stringify(BRS.accountInfo.assetBalances);
 
@@ -693,7 +664,7 @@ var BRS = (function(BRS, $, undefined) {
         });
     };
 
-    BRS.checkAssetDifferences = function(current_balances, previous_balances) {
+    BRS.checkAssetDifferences = function (current_balances, previous_balances) {
         var current_balances_ = {};
         var previous_balances_ = {};
 
@@ -730,8 +701,7 @@ var BRS = (function(BRS, $, undefined) {
 
         if (nr === 0) {
 
-        }
-        else if (nr <= 3) {
+        } else if (nr <= 3) {
             for (k in diff) {
                 BRS.sendRequest("getAsset", {
                     "asset": k,
@@ -739,7 +709,7 @@ var BRS = (function(BRS, $, undefined) {
                         "asset": k,
                         "difference": diff[k]
                     }
-                }, function(asset, input) {
+                }, function (asset, input) {
                     if (asset.errorCode) {
                         return;
                     }
@@ -756,14 +726,13 @@ var BRS = (function(BRS, $, undefined) {
                                 "count": quantity
                             }), {
                                 type: 'success',
-                    offset: {
-                        x: 5,
-                        y: 60
-                        }
+                                offset: {
+                                    x: 5,
+                                    y: 60
+                                }
                             });
                         }
-                    }
-                    else {
+                    } else {
                         asset.difference = asset.difference.substring(1);
 
                         quantity = BRS.formatQuantity(asset.difference, asset.decimals);
@@ -775,43 +744,39 @@ var BRS = (function(BRS, $, undefined) {
                                 "count": quantity
                             }), {
                                 type: 'success',
-                    offset: {
-                        x: 5,
-                        y: 60
-                        }
+                                offset: {
+                                    x: 5,
+                                    y: 60
+                                }
                             });
                         }
                     }
                 });
             }
-        }
-        else {
+        } else {
             $.notify($.t("multiple_assets_differences"), {
                 type: 'success',
-                    offset: {
-                        x: 5,
-                        y: 60
-                        }
+                offset: {
+                    x: 5,
+                    y: 60
+                }
             });
         }
     };
 
-    BRS.checkLocationHash = function(password) {
+    BRS.checkLocationHash = function (password) {
         if (window.location.hash) {
             var hash = window.location.hash.replace("#", "").split(":");
             var $modal;
             if (hash.length === 2) {
                 if (hash[0] === "message") {
                     $modal = $("#send_message_modal");
-                }
-                else if (hash[0] === "send") {
+                } else if (hash[0] === "send") {
                     $modal = $("#send_money_modal");
-                }
-                else if (hash[0] === "asset") {
+                } else if (hash[0] === "asset") {
                     BRS.goToAsset(hash[1]);
                     return;
-                }
-                else {
+                } else {
                     $modal = "";
                 }
 
@@ -832,8 +797,8 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.updateBlockchainDownloadProgress = function() {
-      var percentage = 100;
+    BRS.updateBlockchainDownloadProgress = function () {
+        var percentage = 100;
         /*if (BRS.state.lastBlockchainFeederHeight && BRS.state.numberOfBlocks < BRS.state.lastBlockchainFeederHeight) {
             percentage = parseInt(Math.round((BRS.state.numberOfBlocks / BRS.state.lastBlockchainFeederHeight) * 100), 10);
         }
@@ -843,8 +808,7 @@ var BRS = (function(BRS, $, undefined) {
 
         if (percentage === 100) {
             $("#downloading_blockchain .progress").hide();
-        }
-        else {
+        } else {
             $("#downloading_blockchain .progress").show();
             $("#downloading_blockchain .progress-bar").css("width", percentage + "%");
             $("#downloading_blockchain .sr-only").html($.t("percent_complete", {
@@ -853,7 +817,7 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.checkIfOnAFork = function() {
+    BRS.checkIfOnAFork = function () {
         if (!BRS.downloadingBlockchain) {
             var onAFork = true;
 
@@ -864,8 +828,7 @@ var BRS = (function(BRS, $, undefined) {
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 onAFork = false;
             }
 
@@ -875,38 +838,36 @@ var BRS = (function(BRS, $, undefined) {
                     offset: {
                         x: 5,
                         y: 60
-                        }
+                    }
                 });
             }
         }
     };
 
-    BRS.showFeeSuggestions = function(input_fee_field_id, response_span_id, fee_id){
-    	$("[name='suggested_fee_spinner']").removeClass("suggested_fee_spinner_display_none");
-    	 BRS.sendRequest("suggestFee", {
-          }, function(response) {
-              if (!response.errorCode) {
-                 $(response_span_id).html("<span class='margin-left-5' data-i18n='standard_fee'>Standard: <a href='#' class='btn-fee-response' name='suggested_fee_value_"+response_span_id.id+"' data-i18n='[title]click_to_apply'>" +(response.standard/100000000).toFixed(8)+ "</a></span> <span class='margin-left-5' data-i18n='cheap_fee'>Cheap: <a href='#' class='btn-fee-response' name='suggested_fee_value_"+response_span_id.id+"' data-i18n='[title]click_to_apply'>" + (response.cheap/100000000).toFixed(8)+ "</a></span> <span class='margin-left-5' data-i18n='priority_fee'>Priority: <a href='#' class='btn-fee-response' name='suggested_fee_value_"+response_span_id.id+"' data-i18n='[title]click_to_apply'>" +(response.priority/100000000).toFixed(8)+ "</a></span>");
-                  $("[name='suggested_fee_value_"+response_span_id.id+"']").i18n(); // apply locale to DOM after ajax call
-                  $("[name='suggested_fee_spinner']").addClass("suggested_fee_spinner_display_none");
-                  $("[name='suggested_fee_value_"+response_span_id.id+"']").on("click", function(e) {
-                            e.preventDefault();
-                            $(input_fee_field_id).val($(this).text());
-                            if (fee_id === undefined)
-                            $(input_fee_field_id).trigger("change"); //// --> for modals with Total field trigger BRS.sendMoneyCalculateTotal
-                            else
-                            $(fee_id).html($(this).text()+ " ALITA"); /// --> for modals without Total field set Fee field
+    BRS.showFeeSuggestions = function (input_fee_field_id, response_span_id, fee_id) {
+        $("[name='suggested_fee_spinner']").removeClass("suggested_fee_spinner_display_none");
+        BRS.sendRequest("suggestFee", {}, function (response) {
+            if (!response.errorCode) {
+                $(response_span_id).html("<span class='margin-left-5' data-i18n='standard_fee'>Standard: <a href='#' class='btn-fee-response' name='suggested_fee_value_" + response_span_id.id + "' data-i18n='[title]click_to_apply'>" + (response.standard / 100000000).toFixed(8) + "</a></span> <span class='margin-left-5' data-i18n='cheap_fee'>Cheap: <a href='#' class='btn-fee-response' name='suggested_fee_value_" + response_span_id.id + "' data-i18n='[title]click_to_apply'>" + (response.cheap / 100000000).toFixed(8) + "</a></span> <span class='margin-left-5' data-i18n='priority_fee'>Priority: <a href='#' class='btn-fee-response' name='suggested_fee_value_" + response_span_id.id + "' data-i18n='[title]click_to_apply'>" + (response.priority / 100000000).toFixed(8) + "</a></span>");
+                $("[name='suggested_fee_value_" + response_span_id.id + "']").i18n(); // apply locale to DOM after ajax call
+                $("[name='suggested_fee_spinner']").addClass("suggested_fee_spinner_display_none");
+                $("[name='suggested_fee_value_" + response_span_id.id + "']").on("click", function (e) {
+                    e.preventDefault();
+                    $(input_fee_field_id).val($(this).text());
+                    if (fee_id === undefined)
+                        $(input_fee_field_id).trigger("change"); //// --> for modals with Total field trigger BRS.sendMoneyCalculateTotal
+                    else
+                        $(fee_id).html($(this).text() + " ALITA"); /// --> for modals without Total field set Fee field
 
-                     });
-              }
-              else {
-               $("#suggested_fee_response").html(response.errorDescription);
-               $("[name='suggested_fee_spinner']").addClass("suggested_fee_spinner_display_none");
-               }
-          });
-    	};
+                });
+            } else {
+                $("#suggested_fee_response").html(response.errorDescription);
+                $("[name='suggested_fee_spinner']").addClass("suggested_fee_spinner_display_none");
+            }
+        });
+    };
 
-    $("#id_search").on("submit", function(e) {
+    $("#id_search").on("submit", function (e) {
         e.preventDefault();
 
         var id = $.trim($("#id_search input[name=q]").val());
@@ -914,63 +875,58 @@ var BRS = (function(BRS, $, undefined) {
         if (/ALITA\-/i.test(id)) {
             BRS.sendRequest("getAccount", {
                 "account": id
-            }, function(response, input) {
+            }, function (response, input) {
                 if (!response.errorCode) {
                     response.account = input.account;
                     BRS.showAccountModal(response);
-                }
-                else {
+                } else {
                     $.notify($.t("error_search_no_results"), {
                         type: 'danger',
-                    offset: {
-                        x: 5,
-                        y: 60
+                        offset: {
+                            x: 5,
+                            y: 60
                         }
                     });
                 }
             });
-        }
-        else {
+        } else {
             if (!/^\d+$/.test(id)) {
                 $.notify($.t("error_search_invalid"), {
                     type: 'danger',
                     offset: {
                         x: 5,
                         y: 60
-                        }
+                    }
                 });
                 return;
             }
             BRS.sendRequest("getTransaction", {
                 "transaction": id
-            }, function(response, input) {
+            }, function (response, input) {
                 if (!response.errorCode) {
                     response.transaction = input.transaction;
                     BRS.showTransactionModal(response);
-                }
-                else {
+                } else {
                     BRS.sendRequest("getAccount", {
                         "account": id
-                    }, function(response, input) {
+                    }, function (response, input) {
                         if (!response.errorCode) {
                             response.account = input.account;
                             BRS.showAccountModal(response);
-                        }
-                        else {
+                        } else {
                             BRS.sendRequest("getBlock", {
                                 "block": id
-                            }, function(response, input) {
+                            }, function (response, input) {
                                 if (!response.errorCode) {
                                     response.block = input.block;
                                     BRS.showBlockModal(response);
-                                }
-                                else {
+                                } else {
                                     $.notify($.t("error_search_no_results"), {
                                         type: 'danger',
-                    offset: {
-                        x: 5,
-                        y: 60
-                        }
+                                        offset: {
+                                            x: 5,
+                                            y: 60
+                                        }
                                     });
                                 }
                             });
@@ -984,7 +940,7 @@ var BRS = (function(BRS, $, undefined) {
     return BRS;
 }(BRS || {}, jQuery));
 
-$(document).ready(function() {
+$(document).ready(function () {
     BRS.init();
 });
 
