@@ -375,6 +375,29 @@
 
   <div id="page" class="wrapper row-offcanvas row-offcanvas-left" style="background-color: #dce1e4;">
     <!-- <button onclick="BRS.pages.asset_exchange();BRS.loadAssetExchangeSidebar()">Onclick</button> -->
+
+    <div class="user-panel" style="position: fixed;right: -80%;top:15px;color: #fff;z-index: 9999;">
+      <div class="pull-left info">
+        <div class="pull-left info">
+          <!-- <div style="margin-bottom:5px;margin-top:5px;"><a href="#" id="account_name" data-toggle="modal"
+            data-target="#account_info_modal" data-i18n="no_name_set">No Name Set</a></div> -->
+          <div id="account_id_dropdown" class="dropdown">
+            <span id="account_id" class="dropdown-toggle" data-toggle="dropdown" data-type="account_id"
+              style="color: #fff;z-index: 9999;"></span>
+            <!-- <ul class="sbdropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#" data-type="account_rs"
+                data-i18n="copy_account_id">Copy Account ID</a></li>
+            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
+                data-type="account_id">Copy Numeric Account ID</a></li>
+            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
+                data-type="message_link" data-i18n="copy_send_message_link">Copy "Send Message" Link</a></li>
+            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#" data-type="send_link"
+                data-i18n="copy_send_burst_link">Copy "Send ALITA" Link</a></li>
+          </ul> -->
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="asset_exchange_page" class="page">
       <section class="content-header">
         <h1 style="font-size: 20px;">Dataset Exchange</h1>
@@ -894,8 +917,8 @@
       var setNameContent = document.getElementById("setNameContent");
       var issues = document.getElementById("issues_names");
       var str = ``;
-      var dataSets=null,
-          assetsId="";
+      var dataSets = null,
+        assetsId = "";
       var dataName = [],
         names = [],
         nameSort = [];
@@ -904,14 +927,14 @@
         assetNames = '',
         assetPasswords = '';
       var _index = '';
-      var url = "http://127.0.0.1:3000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52";
+      // var url = "http://api.datadex.trade:5000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52";
       var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-      var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
-      var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
+      // var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
+      // var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
       // var url4 = "http://localhost:3000/getDatasetAddress?" + "asset=" + content;
       asset_exchange_liquidity.style.display = "none";
       //异步获取asset
-      setTimeout(function () {
+      /* setTimeout(function () {
         var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
           listtitle = document.querySelectorAll("#asset_exchange_sidebar_content a .list-group-item-heading");
         Array.from(Alist).forEach((item, index) => {
@@ -927,26 +950,27 @@
               }
             })
 
-            $.get("http://localhost:3000/getDatasetAddress?" + "asset=" + content, function (data) {
+            $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (data) {
               dataSets = eval('(' + data + ')');
-              assetsId=dataSets.data;
+              assetsId = dataSets.data;
+              // console.log(data);
             })
           }
         })
 
-      }, 3000);
+      }, 3000); */
       //获取quantityQNT文本框中的值
-      $("#issues_names").bind('blur', function () {
-        issues_names = $("#issues_names").val();
-      });
-      $("#assetName").bind('blur', function () {
-        assetNames = $("#assetName").val();
-      });
-      $("#assetPassword").bind('blur', function () {
-        assetPasswords = $("#assetPassword").val();
-      });
+      /*  $("#issues_names").bind('blur', function () {
+         issues_names = $("#issues_names").val();
+       });
+       $("#assetName").bind('blur', function () {
+         assetNames = $("#assetName").val();
+       });
+       $("#assetPassword").bind('blur', function () {
+         assetPasswords = $("#assetPassword").val();
+       }); */
       //点击addliquid调用接口
-      liquidity.onclick = function () {
+      /* liquidity.onclick = function () {
         transfer(content, issues_names);
         sendMoney(issues_names);
       }
@@ -998,7 +1022,7 @@
             alert(err);
           }
         })
-      }
+      } */
       $.get(url1, function (data) {
         dataName = eval('(' + data + ')').assets;
         dataName.forEach(item => {
@@ -1009,17 +1033,202 @@
         })
       })
 
-      $.get(url, function (data) {
+      /* $.get("http://api.datadex.trade:5000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52", function (
+        data) {
         str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
              <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
         `;
         $setValue.append(str);
-      })
+      }) */
 
     })();
-  </script>
-  <script>
+
+
     (function () {
+      var issueId = document.getElementById("issueDatasetId"),
+        issueDataset = document.getElementById("issue_asset_Dataset"),
+        issueDescription = document.getElementById("issue_asset_description"),
+        datasetPassword = document.getElementById("issue_dataset_password"),
+        issues = document.getElementById("issues_names"),
+        liquidity = document.getElementById("liquidity"),
+        asset_exchange_liquidity = document.getElementById("asset_exchange_liquidity"),
+        dataset_names = "",
+        description_names = "",
+        dataset_password = "",
+        transactionId = "",
+        content = "",
+        accountId = "",
+        exchange_traction = "",
+        contracts = "",
+        publicKeys = "",
+        $setValue = $("#setValue"),
+        str = ``;
+      var issues_names = '',
+        assetNames = '',
+        assetPasswords = '';
+      var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
+      var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
+      asset_exchange_liquidity.style.display = "none";
+      //异步获取
+      setTimeout(function () {
+        var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
+          listtitle = document.querySelectorAll(
+            "#asset_exchange_sidebar_content a .list-group-item-heading");
+        Array.from(Alist).forEach((item, index) => {
+          item.onclick = function () {
+            asset_exchange_liquidity.style.display = "inline-block";
+            content = $(item).attr("data-asset");
+            accountId = $("#account_id").html();
+            // console.log(6666, content, accountId);
+            Array.from(listtitle).forEach((res, title) => {
+              if (index == title) {
+                var temp = res.innerHTML.toUpperCase();
+                setNameContent.innerHTML = temp;
+                issues.setAttribute("placeholder", temp);
+              }
+            })
+            /* $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (
+              getTractionId) {
+              exchange_traction = eval('(' + getTractionId + ')').data;
+              console.log(6767, exchange_traction);
+              $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
+                exchange_traction,
+                function (contract) {
+                  console.log(contract);
+                  contracts = eval('(' + contract + ')').atRS;
+                  $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
+                    "&account=" + contracts + "&_=" + new Date().getTime(),
+                    function (public) {
+                      publicKeys = eval('(' + public + ')').publicKey;
+                      console.log(909090, publicKeys);
+                    })
+                })
+            }) */
+          }
+        })
+      }, 3000)
+
+      //得到TransactionID的值
+      function getTransactionID(name, description, password) {
+        $.get("http://api.datadex.trade:5000/createDatasetPool?" + "name=" + name + "&description=" + description +
+          "&passPhrase=" + password,
+          function (datas) {
+            transactionId = eval('(' + datas + ')').TransactionID;
+            console.log(888, transactionId);
+            $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
+              "&dataset_id=" +
+              transactionId + "&asset_id=" + content + "&alita_id=" + accountId +
+              "&asset_quantity=" + 0 +
+              "&alita_quantity=" + 0 + "&op=" +
+              1,
+              function (contract) {
+                $.get("http://api.datadex.trade:5000/getContractFunction?" + "ContractId=" + transactionId,
+                  function (data) {
+                    str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
+             <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
+        `;
+                    $setValue.append(str);
+                  })
+              })
+          })
+      }
+      //获取Create New Dataset文本框中的值
+      $("#issue_asset_Dataset").bind('blur', function () {
+        dataset_names = $("#issue_asset_Dataset").val();
+      });
+      $("#issue_asset_description").bind('blur', function () {
+        description_names = $("#issue_asset_description").val();
+
+      });
+      $("#issue_dataset_password").bind('blur', function () {
+        dataset_password = $("#issue_dataset_password").val();
+      })
+      //获取Add Liquidity文本框中的值
+      $("#issues_names").bind('blur', function () {
+        issues_names = $("#issues_names").val();
+      });
+      $("#assetName").bind('blur', function () {
+        assetNames = $("#assetName").val();
+      });
+      $("#assetPassword").bind('blur', function () {
+        assetPasswords = $("#assetPassword").val();
+      });
+      issueId.onclick = function () {
+        getTransactionID(dataset_names, description_names, dataset_password);
+      }
+
+
+      //点击addliquid调用接口
+      liquidity.onclick = function () {
+        $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (
+          getTractionId) {
+          exchange_traction = eval('(' + getTractionId + ')').data;
+          console.log(6767, exchange_traction);
+          $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
+            exchange_traction,
+            function (contract) {
+              console.log(contract);
+              contracts = eval('(' + contract + ')').atRS;
+              $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
+                "&account=" + contracts + "&_=" + new Date().getTime(),
+                function (public) {
+                  publicKeys = eval('(' + public + ')').publicKey;
+                  transfer(content, issues_names, contracts, publicKeys);
+                  sendMoney(issues_names, contracts, publicKeys);
+                })
+            })
+        })
+      }
+
+      function transfer(val1, val2, val3, val4) {
+        $.ajax({
+          url: url3,
+          type: "POST",
+          dataType: "json",
+          data: {
+            asset: val1,
+            recipient: val3,
+            deadline: 1440,
+            quantityQNT: val2,
+            feeNQT: 1,
+            publicKey: val4
+          },
+          success: function (result) {
+            console.log(result);
+          },
+          error: function (xhr, status, p3, p4) {
+            var err = "Error " + " " + status + " " + p3;
+            if (xhr.responseText && xhr.responseText[0] == "{")
+              err = JSON.parse(xhr.responseText).message;
+            alert(err);
+          }
+        })
+      }
+
+      function sendMoney(val, val2, val3) {
+        $.ajax({
+          url: url2,
+          type: "POST",
+          dataType: "json",
+          data: {
+            recipient: val2,
+            deadline: 1440,
+            amountNQT: val,
+            feeNQT: 1,
+            publicKey: val3
+          },
+          success: function (result) {
+            console.log(result);
+          },
+          error: function (xhr, status, p3, p4) {
+            var err = "Error " + " " + status + " " + p3;
+            if (xhr.responseText && xhr.responseText[0] == "{")
+              err = JSON.parse(xhr.responseText).message;
+            alert(err);
+          }
+        })
+      }
+
 
 
 
