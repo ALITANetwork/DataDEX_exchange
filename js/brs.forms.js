@@ -1,12 +1,12 @@
 /**
  * @depends {brs.js}
  */
-var BRS = (function(BRS, $, undefined) {
+var BRS = (function (BRS, $, undefined) {
     BRS.confirmedFormWarning = false;
 
     BRS.forms = {};
 
-    $(".modal form input").keydown(function(e) {
+    $(".modal form input").keydown(function (e) {
         if (e.which === "13") {
             e.preventDefault();
             if (BRS.settings.submit_on_enter && e.target.type !== "textarea") {
@@ -17,7 +17,7 @@ var BRS = (function(BRS, $, undefined) {
         }
     });
 
-    $(".modal button.btn-primary:not([data-dismiss=modal]):not([data-ignore=true])").click(function() {
+    $(".modal button.btn-primary:not([data-dismiss=modal]):not([data-ignore=true])").click(function () {
         // ugly hack - this whole ui is hack, got a big urge to vomit
         if ($(this)[0].id === "sign_message_modal_button") { // hack hackity hack!
             BRS.forms.signModalButtonClicked();
@@ -60,7 +60,7 @@ var BRS = (function(BRS, $, undefined) {
         }
     }
 
-    BRS.addMessageData = function(data, requestType) {
+    BRS.addMessageData = function (data, requestType) {
         var encrypted;
         if (requestType === "sendMessage") {
             data.add_message = true;
@@ -147,7 +147,7 @@ var BRS = (function(BRS, $, undefined) {
     };
 
 
-    BRS.submitForm = function($modal, $btn) {
+    BRS.submitForm = function ($modal, $btn) {
         if (!$btn) {
             $btn = $modal.find("button.btn-primary:not([data-dismiss=modal])");
         }
@@ -168,7 +168,7 @@ var BRS = (function(BRS, $, undefined) {
         }
 
         var requestType = $form.find("input[name=request_type]").val();
-        var requestTypeKey = requestType.replace(/([A-Z])/g, function($1) {
+        var requestTypeKey = requestType.replace(/([A-Z])/g, function ($1) {
             return "_" + $1.toLowerCase();
         });
 
@@ -204,8 +204,24 @@ var BRS = (function(BRS, $, undefined) {
 
         var invalidElement = false;
 
+
         //TODO
-        $form.find(":input").each(function() {
+        $form.find(":input").each(function () {
+           /*  var name = String($(this).attr("name")),
+                value = $(this).val();
+            var error = "";
+            console.log(name, value);
+            if (name == "name") {
+                // var name = $("#issue_asset_Dataset").val();
+                $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + value, function (success) {
+                    dataBase = eval('(' + success + ')');
+                    console.log(dataBase);
+                    if (dataBase.state == "ok") {
+                        alert("Dataset NAME is already used");
+                        return false;
+                    }
+                })
+            } */
             if ($(this).is(":invalid")) {
                 var error = "";
                 var name = String($(this).attr("name")).replace("NXT", "").replace("NQT", "").capitalize();
@@ -227,7 +243,6 @@ var BRS = (function(BRS, $, undefined) {
                         }
                     }
                 }
-
                 if ($(this).hasAttr("min")) {
                     if (!/^[\-\d\.]+$/.test(value)) {
                         error = $.t("error_not_a_number", {
@@ -249,6 +264,7 @@ var BRS = (function(BRS, $, undefined) {
                         "field": BRS.getTranslatedFieldName(name).toLowerCase()
                     }).capitalize();
                 }
+
 
                 $form.find(".error_message").html(error).show();
 
@@ -482,7 +498,7 @@ var BRS = (function(BRS, $, undefined) {
             }
         }
 
-        BRS.sendRequest(requestType, data, function(response) {
+        BRS.sendRequest(requestType, data, function (response) {
             //todo check again.. response.error
             var formCompleteFunction;
             if (response.fullHash) {
@@ -495,9 +511,9 @@ var BRS = (function(BRS, $, undefined) {
                 if (successMessage) {
                     $.notify(successMessage.escapeHTML(), {
                         type: 'success',
-                    offset: {
-                        x: 5,
-                        y: 60
+                        offset: {
+                            x: 5,
+                            y: 60
                         }
                     });
                 }
@@ -509,7 +525,7 @@ var BRS = (function(BRS, $, undefined) {
                         data.requestType = requestType;
 
                         if (response.transaction) {
-                            BRS.addUnconfirmedTransaction(response.transaction, function(alreadyProcessed) {
+                            BRS.addUnconfirmedTransaction(response.transaction, function (alreadyProcessed) {
                                 response.alreadyProcessed = alreadyProcessed;
                                 formCompleteFunction(response, data);
                             });
@@ -564,9 +580,9 @@ var BRS = (function(BRS, $, undefined) {
 
                     $.notify(errorMessage.escapeHTML(), {
                         type: 'danger',
-                    offset: {
-                        x: 5,
-                        y: 60
+                        offset: {
+                            x: 5,
+                            y: 60
                         }
                     });
                 }
@@ -574,7 +590,7 @@ var BRS = (function(BRS, $, undefined) {
         });
     };
 
-    BRS.unlockForm = function($modal, $btn, hide) {
+    BRS.unlockForm = function ($modal, $btn, hide) {
         $modal.find("button").prop("disabled", false);
         if ($btn) {
             $btn.button("reset");
@@ -585,7 +601,7 @@ var BRS = (function(BRS, $, undefined) {
         }
     };
 
-    BRS.sendMultiOut = function(recipients, amounts, fee, passphrase) {
+    BRS.sendMultiOut = function (recipients, amounts, fee, passphrase) {
         var multiOutString = "";
         for (var i = 0; i < recipients.length; i++) {
             multiOutString += recipients[i] + ":" + BRS.convertToNQT(amounts[i]) + ";";
@@ -599,7 +615,7 @@ var BRS = (function(BRS, $, undefined) {
             deadline: "1440",
         };
 
-        BRS.sendRequest("sendMoneyMulti", data, function(response) {
+        BRS.sendRequest("sendMoneyMulti", data, function (response) {
             if (response.errorCode) {
                 $(".multi-out").find(".error_message").html(response.errorDescription.escapeHTML()).show();
             } else {
@@ -608,7 +624,7 @@ var BRS = (function(BRS, $, undefined) {
         });
     };
 
-    BRS.sendMultiOutSame = function(recipients, amount, fee,  passphrase) {
+    BRS.sendMultiOutSame = function (recipients, amount, fee, passphrase) {
         var multiOutString = "";
         for (var i = 0; i < recipients.length; i++) {
             multiOutString += recipients[i] + ";";
@@ -623,7 +639,7 @@ var BRS = (function(BRS, $, undefined) {
             deadline: "1440",
         };
 
-        BRS.sendRequest("sendMoneyMultiSame", data, function(response) {
+        BRS.sendRequest("sendMoneyMultiSame", data, function (response) {
             if (response.errorCode) {
                 $(".multi-out").find(".error_message").html(response.errorDescription.escapeHTML()).show();
             } else {

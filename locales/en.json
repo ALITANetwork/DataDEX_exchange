@@ -342,6 +342,7 @@
     "error_message_decryption": "The message could not be decrypted.",
     "error_message_encryption": "The message could not be encrypted.",
     "error_min_value": "__field__: Minimum value is __min__.",
+    "error_deDup":"Dataset NAME is already used",
     "error_missing_alias_name": "Missing alias name.",
     "error_missing_feedback_message": "Missing feedback message.",
     "error_new_account": "You have a brand new account, fund it with some coins first.",

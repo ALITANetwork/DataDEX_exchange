@@ -927,102 +927,8 @@
         assetNames = '',
         assetPasswords = '';
       var _index = '';
-      // var url = "http://api.datadex.trade:5000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52";
       var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-      // var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
-      // var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
-      // var url4 = "http://localhost:3000/getDatasetAddress?" + "asset=" + content;
-      asset_exchange_liquidity.style.display = "none";
-      //异步获取asset
-      /* setTimeout(function () {
-        var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
-          listtitle = document.querySelectorAll("#asset_exchange_sidebar_content a .list-group-item-heading");
-        Array.from(Alist).forEach((item, index) => {
-          item.onclick = function () {
-            asset_exchange_liquidity.style.display = "inline-block";
-            content = $(item).attr("data-asset");
 
-            Array.from(listtitle).forEach((res, title) => {
-              if (index == title) {
-                var temp = res.innerHTML.toUpperCase();
-                setNameContent.innerHTML = temp;
-                issues.setAttribute("placeholder", temp);
-              }
-            })
-
-            $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (data) {
-              dataSets = eval('(' + data + ')');
-              assetsId = dataSets.data;
-              // console.log(data);
-            })
-          }
-        })
-
-      }, 3000); */
-      //获取quantityQNT文本框中的值
-      /*  $("#issues_names").bind('blur', function () {
-         issues_names = $("#issues_names").val();
-       });
-       $("#assetName").bind('blur', function () {
-         assetNames = $("#assetName").val();
-       });
-       $("#assetPassword").bind('blur', function () {
-         assetPasswords = $("#assetPassword").val();
-       }); */
-      //点击addliquid调用接口
-      /* liquidity.onclick = function () {
-        transfer(content, issues_names);
-        sendMoney(issues_names);
-      }
-
-      function transfer(val1, val2) {
-        $.ajax({
-          url: url3,
-          type: "POST",
-          dataType: "json",
-          data: {
-            asset: val1,
-            recipient: "ALITA-W9Z6-6CAJ-ZDML-59P52",
-            deadline: 1440,
-            quantityQNT: val2,
-            feeNQT: 1,
-            publicKey: "b2705d9bc67cdd685bb7af2a9ddfb3dcdb2c084112f1e8a6b536e8c7a9c3d501"
-          },
-          success: function (result) {
-            console.log(result);
-          },
-          error: function (xhr, status, p3, p4) {
-            var err = "Error " + " " + status + " " + p3;
-            if (xhr.responseText && xhr.responseText[0] == "{")
-              err = JSON.parse(xhr.responseText).message;
-            alert(err);
-          }
-        })
-      }
-
-      function sendMoney(val) {
-        $.ajax({
-          url: url2,
-          type: "POST",
-          dataType: "json",
-          data: {
-            recipient: "ALITA-W9Z6-6CAJ-ZDML-59P52",
-            deadline: 1440,
-            amountNQT: val,
-            feeNQT: 1,
-            publicKey: "b2705d9bc67cdd685bb7af2a9ddfb3dcdb2c084112f1e8a6b536e8c7a9c3d501"
-          },
-          success: function (result) {
-            console.log(result);
-          },
-          error: function (xhr, status, p3, p4) {
-            var err = "Error " + " " + status + " " + p3;
-            if (xhr.responseText && xhr.responseText[0] == "{")
-              err = JSON.parse(xhr.responseText).message;
-            alert(err);
-          }
-        })
-      } */
       $.get(url1, function (data) {
         dataName = eval('(' + data + ')').assets;
         dataName.forEach(item => {
@@ -1032,15 +938,6 @@
           sel.appendChild(opt);;
         })
       })
-
-      /* $.get("http://api.datadex.trade:5000/getContractFunction?ContractId=ALITA-W9Z6-6CAJ-ZDML-59P52", function (
-        data) {
-        str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
-             <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
-        `;
-        $setValue.append(str);
-      }) */
-
     })();
 
 
@@ -1062,7 +959,8 @@
         contracts = "",
         publicKeys = "",
         $setValue = $("#setValue"),
-        str = ``;
+        str = "",
+        data_names='';
       var issues_names = '',
         assetNames = '',
         assetPasswords = '';
@@ -1082,6 +980,7 @@
             // console.log(6666, content, accountId);
             Array.from(listtitle).forEach((res, title) => {
               if (index == title) {
+                data_names=res.innerHTML;
                 var temp = res.innerHTML.toUpperCase();
                 setNameContent.innerHTML = temp;
                 issues.setAttribute("placeholder", temp);
@@ -1109,40 +1008,44 @@
       }, 3000)
 
       //得到TransactionID的值
-      function getTransactionID(name, description, password) {
-        $.get("http://api.datadex.trade:5000/createDatasetPool?" + "name=" + name + "&description=" + description +
-          "&passPhrase=" + password,
-          function (datas) {
-            transactionId = eval('(' + datas + ')').TransactionID;
-            console.log(888, transactionId);
-            $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
-              "&dataset_id=" +
-              transactionId + "&asset_id=" + content + "&alita_id=" + accountId +
-              "&asset_quantity=" + 0 +
-              "&alita_quantity=" + 0 + "&op=" +
-              1,
-              function (contract) {
-                $.get("http://api.datadex.trade:5000/getContractFunction?" + "ContractId=" + transactionId,
-                  function (data) {
-                    str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
-             <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
-        `;
-                    $setValue.append(str);
-                  })
-              })
-          })
-      }
+      /* function getTransactionID(name, description, password) {
+          $.get("http://api.datadex.trade:5000/createDatasetPool?" + "name=" + name + "&description=" +
+            description +
+            "&passPhrase=" + password,
+            function (datas) {
+              transactionId = eval('(' + datas + ')').TransactionID;
+              var accountIds = $("#account_id").html();
+              $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
+                "&dataset_id=" + transactionId + "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
+                "&alita_quantity=" + 0 + "&op=" + 1,
+                function (contract) {
+                  console.log(contract);
+                })
+            })
+        } */
+
       //获取Create New Dataset文本框中的值
       $("#issue_asset_Dataset").bind('blur', function () {
-        dataset_names = $("#issue_asset_Dataset").val();
-      });
-      $("#issue_asset_description").bind('blur', function () {
+        dataset_names = $("#issue_asset_Dataset").val()
+        // var name = $("#issue_asset_Dataset").val();
+        // $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {
+        //   if (success.state == "ok") {
+        //     dataset_names = false;
+        //     alert("Dataset NAME is already used");
+        //   } else {
+        //     
+        //   }
+        // })
+      })
+
+
+      /* $("#issue_asset_description").bind('blur', function () {
         description_names = $("#issue_asset_description").val();
 
       });
       $("#issue_dataset_password").bind('blur', function () {
         dataset_password = $("#issue_dataset_password").val();
-      })
+      }) */
       //获取Add Liquidity文本框中的值
       $("#issues_names").bind('blur', function () {
         issues_names = $("#issues_names").val();
@@ -1153,25 +1056,33 @@
       $("#assetPassword").bind('blur', function () {
         assetPasswords = $("#assetPassword").val();
       });
-      issueId.onclick = function () {
+      /* issueId.onclick = function () {
         getTransactionID(dataset_names, description_names, dataset_password);
-      }
+      } */
 
 
       //点击addliquid调用接口
       liquidity.onclick = function () {
-        $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (
+        $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "dataset_name=" + data_names, function (
           getTractionId) {
           exchange_traction = eval('(' + getTractionId + ')').data;
           console.log(6767, exchange_traction);
           $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
             exchange_traction,
             function (contract) {
-              console.log(contract);
               contracts = eval('(' + contract + ')').atRS;
+              console.log(contracts);
               $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
                 "&account=" + contracts + "&_=" + new Date().getTime(),
                 function (public) {
+                  $.get("http://api.datadex.trade:5000/getContractFunction?" + "ContractId=" + contracts,
+                    function (data) {
+                      console.log(data);
+                      str = `<input id="buy_asset_price getValue" value="${data[0].price}" type="text" name="buy_asset_price" class="form-control" data-type="buy"/>
+             <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
+        `;
+                      $setValue.appendTo(str);
+                    })
                   publicKeys = eval('(' + public + ')').publicKey;
                   transfer(content, issues_names, contracts, publicKeys);
                   sendMoney(issues_names, contracts, publicKeys);

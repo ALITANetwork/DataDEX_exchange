@@ -1243,6 +1243,40 @@ var BRS = (function (BRS, $, undefined) {
 
     BRS.forms.issueAsset = function ($modal) {
         var data = BRS.getFormData($modal.find("form:first"));
+        var name = $("#issue_asset_Dataset").val(),
+            description_names = $("#issue_asset_description").val(),
+            dataset_password = $("#issue_dataset_password").val();
+        var checkname = false;
+        $.ajaxSettings.async = false;
+        $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {
+            var dataBase = eval('(' + success + ')');
+            if (dataBase.state == "ok") {
+                checkname = true;
+                return;
+            } else {
+                checkname = false;
+                $.get("http://api.datadex.trade:5000/createDatasetPool?" + "name=" + name + "&description=" +
+                    description_names +
+                    "&passPhrase=" + dataset_password,
+                    function (datas) {
+                        transactionId = eval('(' + datas + ')').TransactionID;
+                        var accountIds = $("#account_id").html();
+                        $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
+                            "&dataset_id=" + transactionId +"&asset_id="+0+ "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
+                            "&alita_quantity=" + 0 + "&op=" + 1,
+                            function (contract) {
+                                console.log(contract);
+                            })
+                    })
+
+            }
+        })
+        $.ajaxSettings.async = true;
+        if (checkname) {
+            alert("Dataset NAME is already used!!!!!!");
+            return
+
+        }
 
         data.description = $.trim(data.description);
 
