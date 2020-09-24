@@ -930,7 +930,7 @@ var BRS = (function (BRS, $, undefined) {
             var balance = new Big(type == "buy" ? BRS.accountInfo.unconfirmedBalanceNQT : BRS.currentAsset.yourBalanceNQT);
             var balanceNQT = new Big(BRS.accountInfo.unconfirmedBalanceNQT);
             var maxQuantity = new Big(BRS.convertToQNTf(BRS.currentAsset.quantityQNT, BRS.currentAsset.decimals));
-
+            console.log(price, balance, balanceNQT.maxQuantity);
             if (balance.cmp(new Big("0")) <= 0) {
                 return;
             }
@@ -1099,18 +1099,23 @@ var BRS = (function (BRS, $, undefined) {
         var feeNQT;
         var totalNXT;
         var quantity;
-        $("#asset_order_modal_button").html(orderType + " Asset").data("resetText", orderType + " Asset");
+        $("#asset_order_modal_button").html(orderType + " DataToken").data("resetText", orderType + " DataToken");
 
         orderType = orderType.toLowerCase();
 
+        quantity = String($("#" + orderType + "_asset_quantity").val());
+        quantityQNT = new BigInteger(BRS.convertToQNT(quantity, BRS.currentAsset.decimals));
+        priceNQT = new BigInteger(BRS.calculatePricePerWholeQNT(BRS.convertToNQT(String($("#" + orderType + "_asset_price").val())), BRS.currentAsset.decimals));
+        feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val())));
         try {
             //TODO
-            quantity = String($("#" + orderType + "_asset_quantity").val());
+            /* quantity = String($("#" + orderType + "_asset_quantity").val());
             quantityQNT = new BigInteger(BRS.convertToQNT(quantity, BRS.currentAsset.decimals));
             priceNQT = new BigInteger(BRS.calculatePricePerWholeQNT(BRS.convertToNQT(String($("#" + orderType + "_asset_price").val())), BRS.currentAsset.decimals));
-            feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val())));
+            feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val()))); */
             totalNXT = BRS.formatAmount(BRS.calculateOrderTotalNQT(quantityQNT, priceNQT, BRS.currentAsset.decimals), false, true);
         } catch (err) {
+            console.log(67878, err);
             $.notify("Invalid input.", {
                 type: 'danger',
                 offset: {
@@ -1262,7 +1267,7 @@ var BRS = (function (BRS, $, undefined) {
                         transactionId = eval('(' + datas + ')').TransactionID;
                         var accountIds = $("#account_id").html();
                         $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
-                            "&dataset_id=" + transactionId +"&asset_id="+0+ "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
+                            "&dataset_id=" + transactionId + "&asset_id=" + 0 + "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
                             "&alita_quantity=" + 0 + "&op=" + 1,
                             function (contract) {
                                 console.log(contract);

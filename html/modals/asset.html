@@ -117,8 +117,8 @@
       </div>
       <div class="modal-footer" style="margin-top:0;">
         <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="cancel">Cancel</button>
-        <button type="button" class="btn btn-primary" data-loading-text="Submitting..."
-          data-i18n="[data-loading-text]submitting">Buy Datatoken</button>
+        <button type="button" class="btn btn-primary" id="asset_order_modal_button" data-loading-text="Submitting..."
+          data-i18n="[data-loading-text]submitting">Datatoken</button>
       </div>
     </div>
   </div>
@@ -363,7 +363,7 @@
                 data-content="The asset name is non-unique. Should be between 3 and 10 characters long."
                 data-i18n="[data-content]asset_name_help" data-container="body" style="color:#4CAA6E"></i></label>
             <input type="text" class="form-control" name="name" id="issue_asset_Dataset" placeholder="Asset Name"
-              data-i18n="[placeholder]asset_name" autofocus tabindex="1" deDup="true"/>
+              data-i18n="[placeholder]asset_name" autofocus tabindex="1" deDup="true" />
           </div>
           <div class="form-group">
             <label for="issue_asset_description" data-i18n="description">DESCRIPTION</label>
@@ -484,8 +484,9 @@
             <label for="issue_asset_name"><span data-i18n="">ALITA</span> <i class="fas fa-question-circle show_popover"
                 data-content="The asset name is non-unique. Should be between 3 and 10 characters long."
                 data-i18n="[data-content]asset_name_help" data-container="body" style="color:#4CAA6E"></i></label>
-            <input type="text" class="form-control" name="name" id="issue_asset_name assetName" placeholder="ALITA"
-              data-i18n="" autofocus tabindex="1" />
+            <!-- id="issue_asset_name assetName" -->
+            <input type="text" class="form-control" name="name" id="assetName" placeholder="ALITA" data-i18n=""
+              autofocus tabindex="1" />
           </div>
           <div class="form-group">
             <label for="issue_asset_name"><span id="setNameContent" data-i18n=""></span> <i
@@ -497,15 +498,16 @@
           </div>
           <div class="form-group secret_phrase">
             <label for="issue_asset_password" data-i18n="passphrase">PASSPHRASE</label>
-            <input type="password" name="secretPhrase" id="issue_asset_password assetPassword" class="form-control"
-              placeholder="" tabindex="8" autocomplete="">
+            <!-- id="issue_asset_password assetPassword" -->
+            <input type="password" name="secretPhrase" id="assetPassword" class="form-control" placeholder=""
+              tabindex="8" autocomplete="">
           </div>
           <input type="hidden" name="request_type" value="issueAsset" />
         </form>
       </div>
       <div class="modal-footer" style="margin-top:0;">
         <button type="button" class="btn btn-default" data-dismiss="modal" data-i18n="cancel">Cancel</button>
-        <button id="liquidity" type="button" class="btn btn-primary" data-loading-text="Submitting..."
+        <button id="liquidity" type="button" class="btn" data-loading-text="Submitting..."
           data-i18n="[data-loading-text]submitting">Add Liquidity</button>
       </div>
     </div>
