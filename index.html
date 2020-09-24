@@ -518,7 +518,7 @@
                                 <div class="col-sm-9">
                                   <div class="input-group">
                                     <input id="buy_asset_price" type="text" value="0" name="buy_asset_price"
-                                      class="form-control" data-type="buy" disabled/>
+                                      class="form-control" data-type="buy" disabled />
                                     <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
                                   </div>
                                 </div>
@@ -620,7 +620,7 @@
                                 <div class="col-sm-9">
                                   <div class="input-group">
                                     <input id="sell_asset_price" type="text" value="0" name="sell_asset_price"
-                                      class="form-control" data-type="sell" disabled/>
+                                      class="form-control" data-type="sell" disabled />
                                     <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
                                   </div>
                                 </div>
@@ -914,6 +914,7 @@
       var asset_exchange_liquidity = document.getElementById("asset_exchange_liquidity");
       var setNameContent = document.getElementById("setNameContent");
       var issues = document.getElementById("issues_names");
+      var selectInput = document.getElementById("asset_exchange_add_asset_bookmark");
       var str = ``;
       var dataSets = null,
         assetsId = "";
@@ -926,7 +927,6 @@
         assetPasswords = '';
       var _index = '';
       var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-
       $.get(url1, function (data) {
         dataName = eval('(' + data + ')').assets;
         dataName.forEach(item => {
@@ -936,6 +936,9 @@
           sel.appendChild(opt);;
         })
       })
+
+
+
     })();
 
 
@@ -964,9 +967,10 @@
         assetPasswords = '';
       var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
       var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
-      asset_exchange_liquidity.style.display = "none";
+      // asset_exchange_liquidity.style.display = "none";
+
       //异步获取
-      setTimeout(function () {
+      setInterval(function () {
         var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
           listtitle = document.querySelectorAll(
             "#asset_exchange_sidebar_content a .list-group-item-heading");
@@ -995,6 +999,7 @@
                         $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
                           "&account=" + accountIds + "&_=" + new Date().getTime(),
                           function (public) {
+                            publicKeys = eval('(' + public + ')').publicKey;
                             $.get("http://api.datadex.trade:5000/getContractFunction?" +
                               "ContractId=" +
                               contracts,
@@ -1008,73 +1013,22 @@
                                 $("#sell_asset_price").val(
                                   `${dataAll[0].state=="failed"?"0":datas.price}`);
                               })
-                            publicKeys = eval('(' + public + ')').publicKey;
+
 
                           })
                       })
                   })
               }
             })
-            /* $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "asset=" + content, function (
-              getTractionId) {
-              exchange_traction = eval('(' + getTractionId + ')').data;
-              console.log(6767, exchange_traction);
-              $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
-                exchange_traction,
-                function (contract) {
-                  console.log(contract);
-                  contracts = eval('(' + contract + ')').atRS;
-                  $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
-                    "&account=" + contracts + "&_=" + new Date().getTime(),
-                    function (public) {
-                      publicKeys = eval('(' + public + ')').publicKey;
-                      console.log(909090, publicKeys);
-                    })
-                })
-            }) */
           }
         })
       }, 3000)
 
-      //得到TransactionID的值
-      /* function getTransactionID(name, description, password) {
-          $.get("http://api.datadex.trade:5000/createDatasetPool?" + "name=" + name + "&description=" +
-            description +
-            "&passPhrase=" + password,
-            function (datas) {
-              transactionId = eval('(' + datas + ')').TransactionID;
-              var accountIds = $("#account_id").html();
-              $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
-                "&dataset_id=" + transactionId + "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
-                "&alita_quantity=" + 0 + "&op=" + 1,
-                function (contract) {
-                  console.log(contract);
-                })
-            })
-        } */
-
       //获取Create New Dataset文本框中的值
       $("#issue_asset_Dataset").bind('blur', function () {
         dataset_names = $("#issue_asset_Dataset").val()
-        // var name = $("#issue_asset_Dataset").val();
-        // $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {
-        //   if (success.state == "ok") {
-        //     dataset_names = false;
-        //     alert("Dataset NAME is already used");
-        //   } else {
-        //     
-        //   }
-        // })
       })
 
-
-      /* $("#issue_asset_description").bind('blur', function () {
-        description_names = $("#issue_asset_description").val();
-
-      });
-      $("#issue_dataset_password").bind('blur', function () {
-        dataset_password = $("#issue_dataset_password").val();
-      }) */
       //获取Add Liquidity文本框中的值
       $("#issues_names").bind('blur', function () {
         issues_names = $("#issues_names").val();
@@ -1095,11 +1049,9 @@
 
       //点击addliquid调用接口
       liquidity.onclick = function () {
-        transfer(content, issues_names, contracts, publicKeys);
+        console.log(content, issues_names, contracts, publicKeys);
         sendMoney(issues_names, contracts, publicKeys);
-        setTimeout(function () {
-
-        })
+        transfer(content, issues_names, contracts, publicKeys);
       }
 
       function transfer(val1, val2, val3, val4) {
@@ -1116,7 +1068,7 @@
             publicKey: val4
           },
           success: function (result) {
-            console.log(result);
+            // console.log(result);
           },
           error: function (xhr, status, p3, p4) {
             var err = "Error " + " " + status + " " + p3;
@@ -1140,7 +1092,15 @@
             publicKey: val3
           },
           success: function (result) {
-            console.log(result);
+            console.log(9090);
+            // var results=eval('(' + result + ')');
+            if (result.broadcasted == false) {
+              console.log(67676767);
+              var issue_Liquidity_modal = document.getElementById("issue_Liquidity_modal"),
+                modalBackdrop = document.querySelector(".modal-backdrop");
+              issue_Liquidity_modal.style.display = "none";
+              modalBackdrop.style.display = "none";
+            }
           },
           error: function (xhr, status, p3, p4) {
             var err = "Error " + " " + status + " " + p3;

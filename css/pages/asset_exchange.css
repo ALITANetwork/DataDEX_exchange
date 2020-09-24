@@ -5,6 +5,9 @@
 .box-assets .box-header {
   padding-bottom: 0 !important;
 }
+#asset_exchange_liquidity{
+  display: none;
+}
 
 .box-assets .box-body {
   padding-top: 0 !important;

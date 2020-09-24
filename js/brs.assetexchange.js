@@ -1250,7 +1250,10 @@ var BRS = (function (BRS, $, undefined) {
         var data = BRS.getFormData($modal.find("form:first"));
         var name = $("#issue_asset_Dataset").val(),
             description_names = $("#issue_asset_description").val(),
-            dataset_password = $("#issue_dataset_password").val();
+            dataset_password = $("#issue_dataset_password").val(),
+            sel = document.getElementById("add_asset_bookmark_id"),
+            dataName = [],
+            url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
         var checkname = false;
         $.ajaxSettings.async = false;
         $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {

@@ -1,15 +1,15 @@
 /**
  * @depends {brs.js}
  */
-var BRS = (function (BRS, $, undefined) {
-    BRS.automaticallyCheckRecipient = function () {
+var BRS = (function(BRS, $, undefined) {
+    BRS.automaticallyCheckRecipient = function() {
         var $recipientFields = $("#add_contact_account_id, #update_contact_account_id, #buy_alias_recipient, #escrow_create_recipient, #inline_message_recipient, #lease_balance_recipient, #reward_recipient, #sell_alias_recipient, #send_message_recipient, #send_money_recipient, #subscription_cancel_recipient, #subscription_create_recipient, #transfer_alias_recipient, #transfer_asset_recipient");
 
-        $recipientFields.on("blur", function () {
+        $recipientFields.on("blur", function() {
             $(this).trigger("checkRecipient");
         });
 
-        $recipientFields.on("checkRecipient", function () {
+        $recipientFields.on("checkRecipient", function() {
             var value = $(this).val();
             var modal = $(this).closest(".modal");
 
@@ -20,10 +20,10 @@ var BRS = (function (BRS, $, undefined) {
             }
         });
 
-        $recipientFields.on("oldRecipientPaste", function () {});
+        $recipientFields.on("oldRecipientPaste", function() {});
     };
 
-    BRS.sendMoneyCalculateTotal = function (element) {
+    BRS.sendMoneyCalculateTotal = function(element) {
         var current_amount = parseFloat($("#send_money_amount").val(), 10);
         var current_fee = parseFloat($("#send_money_fee").val(), 10);
         var fee = isNaN(current_fee) ? 1 : (current_fee < 0.00735 ? 0.00735 : current_fee);
@@ -32,12 +32,10 @@ var BRS = (function (BRS, $, undefined) {
         $("#send_money_amount").val(amount.toFixed(8));
         $("#send_money_fee").val(fee.toFixed(8));
 
-        console.log("ready");
         $(element).closest(".modal").find(".total_amount_ordinary").html(BRS.formatAmount(BRS.convertToNQT(amount + fee)) + " ALITA");
-
     };
 
-    $("#send_message_modal, #send_money_modal, #add_contact_modal").on("show.bs.modal", function (e) {
+    $("#send_message_modal, #send_money_modal, #add_contact_modal").on("show.bs.modal", function(e) {
         var $invoker = $(e.relatedTarget);
 
         var account = $invoker.data("account");
@@ -58,12 +56,12 @@ var BRS = (function (BRS, $, undefined) {
         BRS.sendMoneyCalculateTotal($(this));
     });
 
-    $("#send_money_amount, #send_money_fee").on("change", function (e) {
+    $("#send_money_amount, #send_money_fee").on("change", function(e) {
         BRS.sendMoneyCalculateTotal($(this));
     });
 
     //todo later: http://twitter.github.io/typeahead.js/
-    $("span.recipient_selector button").on("click", function (e) {
+    $("span.recipient_selector button").on("click", function(e) {
         if (!Object.keys(BRS.contacts).length) {
             e.preventDefault();
             e.stopPropagation();
@@ -79,7 +77,7 @@ var BRS = (function (BRS, $, undefined) {
         }
     });
 
-    $(document).on("click", "span.recipient_selector button", function (e) {
+    $(document).on("click", "span.recipient_selector button", function(e) {
         if (!Object.keys(BRS.contacts).length) {
             e.preventDefault();
             e.stopPropagation();
@@ -95,13 +93,13 @@ var BRS = (function (BRS, $, undefined) {
         }
     });
 
-    $("span.recipient_selector").on("click", "ul li a", function (e) {
+    $("span.recipient_selector").on("click", "ul li a", function(e) {
         e.preventDefault();
         $(this).closest("form").find("input[name=converted_account_id]").val("");
         $(this).closest("form").find("input[name=recipient],input[name=account_id]").not("[type=hidden]").trigger("unmask").val($(this).data("contact")).trigger("blur");
     });
 
-    $(document).on("click", ".recipient_selector_multi_out button", function (e) {
+    $(document).on("click", ".recipient_selector_multi_out button", function(e) {
         if (!Object.keys(BRS.contacts).length) {
             e.preventDefault();
             e.stopPropagation();
@@ -117,13 +115,13 @@ var BRS = (function (BRS, $, undefined) {
         }
     });
 
-    $(document).on("click", ".recipient_selector_multi_out ul li a", function (e) {
+    $(document).on("click", ".recipient_selector_multi_out ul li a", function(e) {
         e.preventDefault();
         // ugly hack - serious jquery cancer
         $(this).parent().parent().parent().parent().find(".multi-out-recipient").val($(this).data("contact"));
     });
 
-    BRS.forms.sendMoneyComplete = function (response, data) {
+    BRS.forms.sendMoneyComplete = function(response, data) {
         if (!(data._extra && data._extra.convertedAccount) && !(data.recipient in BRS.contacts)) {
             $.notify($.t("success_send_money") + " <a href='#' data-account='" + BRS.getAccountFormatted(data, "recipient") + "' data-toggle='modal' data-target='#add_contact_modal' style='text-decoration:underline'>" + $.t("add_recipient_to_contacts_q") + "</a>", {
                 type: 'success',
@@ -143,8 +141,8 @@ var BRS = (function (BRS, $, undefined) {
         }
     };
 
-    BRS.sendMoneyShowAccountInformation = function (accountId) {
-        BRS.getAccountError(accountId, function (response) {
+    BRS.sendMoneyShowAccountInformation = function(accountId) {
+        BRS.getAccountError(accountId, function(response) {
             if (response.type === "success") {
                 $("#send_money_account_info").hide();
             } else {
@@ -154,10 +152,10 @@ var BRS = (function (BRS, $, undefined) {
         });
     };
 
-    BRS.getAccountError = function (accountId, callback) {
+    BRS.getAccountError = function(accountId, callback) {
         BRS.sendRequest("getAccount", {
             "account": accountId
-        }, function (response) {
+        }, function(response) {
             if (response.publicKey) {
                 callback({
                     "type": "info",
@@ -202,11 +200,11 @@ var BRS = (function (BRS, $, undefined) {
         });
     };
 
-    BRS.correctAddressMistake = function (el) {
+    BRS.correctAddressMistake = function(el) {
         $(el).closest(".modal-body").find("input[name=recipient],input[name=account_id]").val($(el).data("address")).trigger("blur");
     };
 
-    BRS.checkRecipient = function (account, modal) {
+    BRS.checkRecipient = function(account, modal) {
         var classes = "callout-info callout-danger callout-warning";
 
         var callout = modal.find(".account_info").first();
@@ -224,7 +222,7 @@ var BRS = (function (BRS, $, undefined) {
             var address = new NxtAddress();
 
             if (address.set(account)) {
-                BRS.getAccountError(account, function (response) {
+                BRS.getAccountError(account, function(response) {
                     modal.find("input[name=recipientPublicKey]").val("");
                     modal.find(".recipient_public_key").hide();
                     if (response.account && response.account.description) {
@@ -257,10 +255,10 @@ var BRS = (function (BRS, $, undefined) {
             if (BRS.databaseSupport && account.charAt(0) !== '@') {
                 BRS.database.select("contacts", [{
                     "name": account
-                }], function (error, contact) {
+                }], function(error, contact) {
                     if (!error && contact.length) {
                         contact = contact[0];
-                        BRS.getAccountError(contact.accountRS, function (response) {
+                        BRS.getAccountError(contact.accountRS, function(response) {
                             modal.find("input[name=recipientPublicKey]").val("");
                             modal.find(".recipient_public_key").hide();
                             if (response.account && response.account.description) {
@@ -290,13 +288,13 @@ var BRS = (function (BRS, $, undefined) {
                 callout.removeClass(classes).addClass("callout-danger").html($.t("recipient_malformed")).show();
             }
         } else {
-            BRS.getAccountError(account, function (response) {
+            BRS.getAccountError(account, function(response) {
                 callout.removeClass(classes).addClass("callout-" + response.type).html(response.message.escapeHTML()).show();
             });
         }
     };
 
-    BRS.checkRecipientAlias = function (account, modal) {
+    BRS.checkRecipientAlias = function(account, modal) {
         var classes = "callout-info callout-danger callout-warning";
         var callout = modal.find(".account_info").first();
         var accountInputField = modal.find("input[name=converted_account_id]");
@@ -305,7 +303,7 @@ var BRS = (function (BRS, $, undefined) {
 
         BRS.sendRequest("getAlias", {
             "aliasName": account
-        }, function (response) {
+        }, function(response) {
             if (response.errorCode) {
                 callout.removeClass(classes).addClass("callout-danger").html($.t("error_invalid_account_id")).show();
             } else {
@@ -336,7 +334,7 @@ var BRS = (function (BRS, $, undefined) {
                             }
                         }
 
-                        BRS.getAccountError(match[1], function (response) {
+                        BRS.getAccountError(match[1], function(response) {
                             modal.find("input[name=recipientPublicKey]").val("");
                             modal.find(".recipient_public_key").hide();
                             if (response.account && response.account.description) {
