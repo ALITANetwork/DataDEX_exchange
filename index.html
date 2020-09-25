@@ -1049,9 +1049,11 @@
 
       //点击addliquid调用接口
       liquidity.onclick = function () {
-        console.log(content, issues_names, contracts, publicKeys);
-        sendMoney(issues_names, contracts, publicKeys);
-        transfer(content, issues_names, contracts, publicKeys);
+        // console.log(content, issues_names, contracts, publicKeys);
+        // sendMoney(issues_names, contracts, publicKeys);
+        sendMoney(issues_names, contracts, assetPasswords);
+        // transfer(content, issues_names, contracts, publicKeys);
+        transfer(content, issues_names, contracts, assetPasswords);
       }
 
       function transfer(val1, val2, val3, val4) {
@@ -1065,10 +1067,12 @@
             deadline: 1440,
             quantityQNT: val2,
             feeNQT: 10000000,
-            publicKey: val4
+            // publicKey: val4
+            secretPhrase: val4
           },
           success: function (result) {
             // console.log(result);
+
           },
           error: function (xhr, status, p3, p4) {
             var err = "Error " + " " + status + " " + p3;
@@ -1089,13 +1093,14 @@
             deadline: 1440,
             amountNQT: val * 100000000,
             feeNQT: 10000000,
-            publicKey: val3
+            // publicKey: val3
+            secretPhrase: val3
           },
           success: function (result) {
-            console.log(9090);
-            // var results=eval('(' + result + ')');
-            if (result.broadcasted == false) {
-              console.log(67676767);
+            console.log(result);
+            var values = result.unsignedTransactionBytes;
+            broadcastTransaction(values);
+            if (result.broadcasted == true) {
               var issue_Liquidity_modal = document.getElementById("issue_Liquidity_modal"),
                 modalBackdrop = document.querySelector(".modal-backdrop");
               issue_Liquidity_modal.style.display = "none";
@@ -1111,6 +1116,19 @@
         })
       }
 
+      function broadcastTransaction(val) {
+        $.ajax({
+          url: "http://wallet.alita.services:8125/burst?requestType=broadcastTransaction",
+          type: "POST",
+          dataType: "json",
+          data: {
+            transactionBytes: val,
+          },
+          success: function (data) {
+            console.log(data);
+          }
+        })
+      }
 
 
 

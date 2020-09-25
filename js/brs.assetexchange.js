@@ -1273,7 +1273,17 @@ var BRS = (function (BRS, $, undefined) {
                             "&dataset_id=" + transactionId + "&asset_id=" + 0 + "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
                             "&alita_quantity=" + 0 + "&op=" + 1,
                             function (contract) {
-                                console.log(contract);
+                                // console.log(contract);
+                                /* var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+                                $.get(url1, function (data) {
+                                    dataName = eval('(' + data + ')').assets;
+                                    dataName.forEach(item => {
+                                        var opt = document.createElement('option');
+                                        opt.appendChild(document.createTextNode(item.name));
+                                        opt.value = item.asset;
+                                        sel.appendChild(opt);;
+                                    })
+                                }) */
                             })
                     })
 
