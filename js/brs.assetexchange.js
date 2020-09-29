@@ -1254,6 +1254,7 @@ var BRS = (function (BRS, $, undefined) {
             sel = document.getElementById("add_asset_bookmark_id"),
             dataName = [],
             url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+        var asset_exchange_add_asset_bookmark = document.getElementById("asset_exchange_add_asset_bookmark");
         var checkname = false;
         $.ajaxSettings.async = false;
         $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {
@@ -1274,16 +1275,20 @@ var BRS = (function (BRS, $, undefined) {
                             "&alita_quantity=" + 0 + "&op=" + 1,
                             function (contract) {
                                 // console.log(contract);
-                                /* var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-                                $.get(url1, function (data) {
-                                    dataName = eval('(' + data + ')').assets;
-                                    dataName.forEach(item => {
-                                        var opt = document.createElement('option');
-                                        opt.appendChild(document.createTextNode(item.name));
-                                        opt.value = item.asset;
-                                        sel.appendChild(opt);;
-                                    })
-                                }) */
+                                // sel.innerHTML = "";
+                                // asset_exchange_add_asset_bookmark.onclick = function () {
+                                //     var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+                                //     $.get(url1, function (data) {
+                                //         dataName = eval('(' + data + ')').assets;
+                                //         dataName.forEach(item => {
+                                //             var opt = document.createElement('option');
+                                //             opt.appendChild(document.createTextNode(item.name));
+                                //             opt.value = item.asset;
+                                //             sel.appendChild(opt);;
+                                //         })
+                                //     })
+                                // }
+
                             })
                     })
 

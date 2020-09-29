@@ -2,10 +2,16 @@
   background-color: #FCFBEF !important;
 }
 
+#asset_contract {
+  color: #7c7979;
+  font-weight: 700;
+}
+
 .box-assets .box-header {
   padding-bottom: 0 !important;
 }
-#asset_exchange_liquidity{
+
+#asset_exchange_liquidity {
   display: none;
 }
 
@@ -13,13 +19,15 @@
   padding-top: 0 !important;
 }
 
-#asset_exchange_bid_orders_table tr:hover td, #asset_exchange_ask_orders_table tr:hover td {
+#asset_exchange_bid_orders_table tr:hover td,
+#asset_exchange_ask_orders_table tr:hover td {
   background-color: #FEFFBC !important;
   cursor: pointer;
   cursor: hand;
 }
 
-.table.table-assets td, .table.table-assets th {
+.table.table-assets td,
+.table.table-assets th {
   border-top: none !important;
   padding: 5px;
 }
@@ -30,7 +38,10 @@
   padding-right: 0 !important;
 }
 
-#buy_asset_box .box-header, #sell_asset_box .box-header, #buy_asset_box .box-title, #sell_asset_box .box-title {
+#buy_asset_box .box-header,
+#sell_asset_box .box-header,
+#buy_asset_box .box-title,
+#sell_asset_box .box-title {
   cursor: pointer;
 }
 
@@ -56,7 +67,8 @@
   border-right: 5px solid transparent !important;
 }
 
-#asset_exchange_sidebar_content .list-group-item.owns_asset.active, #asset_exchange_sidebar_content .list-group-item.owns_asset:hover {
+#asset_exchange_sidebar_content .list-group-item.owns_asset.active,
+#asset_exchange_sidebar_content .list-group-item.owns_asset:hover {
   border-right: 5px solid #FFE545 !important;
 }
 
@@ -86,7 +98,8 @@
   left: 0 !important;
 }
 
-#buy_automatic_price.nonzero, #sell_automatic_price.nonzero {
+#buy_automatic_price.nonzero,
+#sell_automatic_price.nonzero {
   cursor: pointer;
 }
 
@@ -112,7 +125,8 @@
   border-right: 5px solid transparent !important;
 }
 
-#asset_exchange_sidebar_content .list-group-item.owns_asset.active, #asset_exchange_sidebar_content .list-group-item.owns_asset:hover {
+#asset_exchange_sidebar_content .list-group-item.owns_asset.active,
+#asset_exchange_sidebar_content .list-group-item.owns_asset:hover {
   border-right: 5px solid #FFE545 !important;
 }
 
@@ -141,4 +155,3 @@
 #asset_exchange_page.no_assets .content-splitter-right {
   left: 0 !important;
 }
- 
