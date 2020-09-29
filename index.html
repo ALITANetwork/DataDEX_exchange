@@ -402,7 +402,6 @@
       <section class="content-header">
         <h1 style="font-size: 20px;">Dataset Exchange</h1>
         <div style="position:absolute;top:9px;right:9px;">
-          <!-- asset_exchange_add_asset_bookmark -->
           <button type="button" class="btn btn-sm btn-default" id="asset_exchange_liquidity" data-toggle="modal"
             data-target="#issue_Liquidity_modal">Add Liquidity</button>
           <span type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_create" data-toggle="modal"
@@ -741,8 +740,6 @@
                     class="fas fa-question-circle show_popover" style="color:#4CAA6E"
                     data-content="Find the ID on the issuer's website or announcement page." data-container="body"
                     data-i18n="[data-content]find_asset_id_help"></i></label>
-                <!-- <input type="text" class="form-control" name="id" id="add_asset_bookmark_id" placeholder="ID" autofocus
-                  tabindex="1" /> -->
                 <select type="text" class="form-control" name="id" id="add_asset_bookmark_id" placeholder="ID" autofocus
                   tabindex="1">
 
@@ -760,15 +757,6 @@
       </div>
     </div>
   </div>
-
-  <!--  <div id="page" class="wrapper row-offcanvas row-offcanvas-left">
-    <aside id="sidebar" class="main-sidebar sidebar-offcanvas">
-      
-    </aside>
-    <aside id="content" class="content-wrapper">
-     
-    </aside>
-  </div> -->
 
 
 
@@ -818,91 +806,50 @@
   <script type="text/javascript">
     BRS.loadLockscreenHTML("html/pages/lockscreen.html");
     BRS.loadHeaderHTML("html/header.html");
-    // BRS.loadSidebarHTML("html/sidebar.html");
-    // BRS.loadSidebarContextHTML("html/sidebar_context.html");
+    /* BRS.loadSidebarHTML("html/sidebar.html");
+    BRS.loadSidebarContextHTML("html/sidebar_context.html");
 
-    /* BRS.loadPageHTML("html/pages/dashboard.html");
+    BRS.loadPageHTML("html/pages/dashboard.html");
     BRS.loadPageHTML("html/pages/crowdfund.html");
     BRS.loadPageHTML("html/pages/transactions.html");
     BRS.loadPageHTML("html/pages/aliases.html");
     BRS.loadPageHTML("html/pages/messages.html");
-    BRS.loadPageHTML("html/pages/contacts.html"); */
-    BRS.loadPageHTML("html/pages/asset_exchange.html");
-    // BRS.loadPageHTML("html/pages/settings.html");
-    /*BRS.loadPageHTML("html/pages/peers.html");
+    BRS.loadPageHTML("html/pages/contacts.html");*/
+    // BRS.loadPageHTML("html/pages/asset_exchange.html");
+    //注释
+    /* BRS.loadPageHTML("html/pages/settings.html");
+    BRS.loadPageHTML("html/pages/peers.html");
     BRS.loadPageHTML("html/pages/dgs.html");
-    BRS.loadPageHTML("html/pages/blocks.html"); */
+    BRS.loadPageHTML("html/pages/blocks.html");
+    BRS.loadModalHTML("html/modals/account.html");
+    BRS.loadModalHTML("html/modals/alias.html");*/
 
-    // BRS.loadModalHTML("html/modals/account.html");
-    // BRS.loadModalHTML("html/modals/alias.html");
     BRS.loadModalHTML("html/modals/asset.html");
-    /*  BRS.loadModalHTML("html/modals/at_create.html");
-     BRS.loadModalHTML("html/modals/block_info.html");
-     BRS.loadModalHTML("html/modals/brs.html");
-     BRS.loadModalHTML("html/modals/contact.html");
-     BRS.loadModalHTML("html/modals/crowd_fund_project.html");
-     BRS.loadModalHTML("html/modals/deployCrowd.html");
-     BRS.loadModalHTML("html/modals/dgs.html");
-     BRS.loadModalHTML("html/modals/dividends.html");
-     BRS.loadModalHTML("html/modals/escrow.html");
-     BRS.loadModalHTML("html/modals/messages_decrypt.html");
-     BRS.loadModalHTML("html/modals/raw_transaction.html");
-     BRS.loadModalHTML("html/modals/request_burst_qr.html");
-     BRS.loadModalHTML("html/modals/reward_assignment.html");
-     BRS.loadModalHTML("html/modals/send_message.html");
-     BRS.loadModalHTML("html/modals/send_money.html");
-     BRS.loadModalHTML("html/modals/subscription.html");
-     BRS.loadModalHTML("html/modals/token.html");
-     BRS.loadModalHTML("html/modals/transaction_info.html");
-     BRS.loadModalHTML("html/modals/transaction_operations.html");
-     BRS.loadModalHTML("html/modals/user_info.html");
-     BRS.loadModalHTML("html/modals/sign_message.html"); */
+
+    //注释
+    /* BRS.loadModalHTML("html/modals/at_create.html");
+    BRS.loadModalHTML("html/modals/block_info.html");
+    BRS.loadModalHTML("html/modals/brs.html");
+    BRS.loadModalHTML("html/modals/contact.html");
+    BRS.loadModalHTML("html/modals/crowd_fund_project.html");
+    BRS.loadModalHTML("html/modals/deployCrowd.html");
+    BRS.loadModalHTML("html/modals/dgs.html");
+    BRS.loadModalHTML("html/modals/dividends.html"); 
+    BRS.loadModalHTML("html/modals/escrow.html");
+    BRS.loadModalHTML("html/modals/messages_decrypt.html");
+    BRS.loadModalHTML("html/modals/raw_transaction.html");*/
+    BRS.loadModalHTML("html/modals/request_burst_qr.html");
+    BRS.loadModalHTML("html/modals/reward_assignment.html");
+    BRS.loadModalHTML("html/modals/send_message.html");
+    /*  BRS.loadModalHTML("html/modals/send_money.html");
+    BRS.loadModalHTML("html/modals/subscription.html");
+    BRS.loadModalHTML("html/modals/token.html");
+    BRS.loadModalHTML("html/modals/transaction_info.html");
+    BRS.loadModalHTML("html/modals/transaction_operations.html");
+    BRS.loadModalHTML("html/modals/user_info.html");
+    BRS.loadModalHTML("html/modals/sign_message.html"); */
   </script>
 
-  <script src="js/brs.js" type="text/javascript"></script>
-  <script src="js/brs.server.js" type="text/javascript"></script>
-  <script src="js/brs.forms.js" type="text/javascript"></script>
-  <script src="js/brs.login.js" type="text/javascript"></script>
-  <script src="js/brs.version.js" type="text/javascript"></script>
-  <script src="js/brs.recipient.js" type="text/javascript"></script>
-  <script src="js/brs.assetexchange.js" type="text/javascript"></script>
-  <script src="js/brs.dgs.js" type="text/javascript"></script>
-  <script src="js/brs.messages.js" type="text/javascript"></script>
-  <script src="js/brs.aliases.js" type="text/javascript"></script>
-  <script src="js/brs.blocks.js" type="text/javascript"></script>
-  <script src="js/brs.transactions.js" type="text/javascript"></script>
-  <script src="js/brs.peers.js" type="text/javascript"></script>
-  <script src="js/brs.contacts.js" type="text/javascript"></script>
-  <script src="js/brs.news.js" type="text/javascript"></script>
-  <script src="js/brs.settings.js" type="text/javascript"></script>
-  <script src="js/brs.theme.js" type="text/javascript"></script>
-  <script src="js/brs.encryption.js" type="text/javascript"></script>
-  <script src="js/brs.modals.js" type="text/javascript"></script>
-  <script src="js/brs.modals.account.js" type="text/javascript"></script>
-  <script src="js/brs.modals.accountdetails.js" type="text/javascript"></script>
-  <script src="js/brs.modals.block.js" type="text/javascript"></script>
-  <script src="js/brs.modals.info.js" type="text/javascript"></script>
-  <script src="js/brs.modals.token.js" type="text/javascript"></script>
-  <script src="js/brs.modals.transaction.js" type="text/javascript"></script>
-  <script src="js/brs.modals.accountinfo.js" type="text/javascript"></script>
-  <script src="js/brs.modals.advanced.js" type="text/javascript"></script>
-  <script src="js/brs.modals.request.js" type="text/javascript"></script>
-  <script src="js/brs.modals.signmessage.js" type="text/javascript"></script>
-  <script src="js/brs.console.js" type="text/javascript"></script>
-  <script src="js/brs.util.js" type="text/javascript"></script>
-  <script src="js/brs.escrow.js" type="text/javascript"></script>
-  <script src="js/brs.modals.escrow.js" type="text/javascript"></script>
-  <script src="js/brs.subscription.js" type="text/javascript"></script>
-  <script src="js/brs.modals.subscription.js" type="text/javascript"></script>
-  <script src="js/brs.at.js" type="text/javascript"></script>
-  <script src="js/brs.crowdfunding.js" type="text/javascript"></script>
-  <script src="js/nsv.dividends.js" type="text/javascript"></script>
-  <script>
-    setTimeout(function () {
-      BRS.pages.asset_exchange();
-      BRS.loadAssetExchangeSidebar();
-    }, 2000);
-  </script>
   <script>
     (function () {
       var $getValue = $("#getValue"),
@@ -1133,6 +1080,50 @@
 
 
     })();
+  </script>
+  <script src="js/brs.js" type="text/javascript"></script>
+  <script src="js/brs.server.js" type="text/javascript"></script>
+  <script src="js/brs.forms.js" type="text/javascript"></script>
+  <script src="js/brs.login.js" type="text/javascript"></script>
+  <script src="js/brs.version.js" type="text/javascript"></script>
+  <script src="js/brs.recipient.js" type="text/javascript"></script>
+  <script src="js/brs.assetexchange.js" type="text/javascript"></script>
+  <script src="js/brs.dgs.js" type="text/javascript"></script>
+  <script src="js/brs.messages.js" type="text/javascript"></script>
+  <script src="js/brs.aliases.js" type="text/javascript"></script>
+  <script src="js/brs.blocks.js" type="text/javascript"></script>
+  <script src="js/brs.transactions.js" type="text/javascript"></script>
+  <script src="js/brs.peers.js" type="text/javascript"></script>
+  <script src="js/brs.contacts.js" type="text/javascript"></script>
+  <script src="js/brs.news.js" type="text/javascript"></script>
+  <script src="js/brs.settings.js" type="text/javascript"></script>
+  <script src="js/brs.theme.js" type="text/javascript"></script>
+  <script src="js/brs.encryption.js" type="text/javascript"></script>
+  <script src="js/brs.modals.js" type="text/javascript"></script>
+  <script src="js/brs.modals.account.js" type="text/javascript"></script>
+  <script src="js/brs.modals.accountdetails.js" type="text/javascript"></script>
+  <script src="js/brs.modals.block.js" type="text/javascript"></script>
+  <script src="js/brs.modals.info.js" type="text/javascript"></script>
+  <script src="js/brs.modals.token.js" type="text/javascript"></script>
+  <script src="js/brs.modals.transaction.js" type="text/javascript"></script>
+  <script src="js/brs.modals.accountinfo.js" type="text/javascript"></script>
+  <script src="js/brs.modals.advanced.js" type="text/javascript"></script>
+  <script src="js/brs.modals.request.js" type="text/javascript"></script>
+  <script src="js/brs.modals.signmessage.js" type="text/javascript"></script>
+  <script src="js/brs.console.js" type="text/javascript"></script>
+  <script src="js/brs.util.js" type="text/javascript"></script>
+  <script src="js/brs.escrow.js" type="text/javascript"></script>
+  <script src="js/brs.modals.escrow.js" type="text/javascript"></script>
+  <script src="js/brs.subscription.js" type="text/javascript"></script>
+  <script src="js/brs.modals.subscription.js" type="text/javascript"></script>
+  <script src="js/brs.at.js" type="text/javascript"></script>
+  <script src="js/brs.crowdfunding.js" type="text/javascript"></script>
+  <script src="js/nsv.dividends.js" type="text/javascript"></script>
+  <script>
+    setTimeout(function () {
+      BRS.pages.asset_exchange();
+      BRS.loadAssetExchangeSidebar();
+    }, 2000);
   </script>
 
 </body>
