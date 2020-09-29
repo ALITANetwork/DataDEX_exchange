@@ -15,7 +15,7 @@ blockchain browser
 
 ## 3.After atcreate sees the transaction information, return to datedex and click "add dataset". At this time, the latest dataset name of the transaction you created will be displayed in the drop-down box. Select the name of the transaction to be created (wait for transaction confirmation, if not, refresh and log in again). After logging in, continue to click "add dataset" to select the newly created transaction name, add the transaction to the left menu, and click the newly added transaction on the left. At this time, the "add liquidity" button will pop up in the top right. And you can trade on the right
 
-![Alt text](https://raw.githubusercontent.com/ALITANetwork/DataDEX_exchange/master/md_en/16013464511.jpg?token=AO2TIYMROSDIH3KO5TDO2I27OKWQG)
+![Alt text](./16013465601.jpg)
 
 ![Alt text](./16013466011.jpg)
 
