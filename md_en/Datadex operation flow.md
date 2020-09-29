@@ -1,6 +1,6 @@
-#Datadex operation flow
+# Datadex operation flow
 
-##1.Enter the key and enter your own account number
+## 1.Enter the key and enter your own account number
 
 ![Alt text](./16013461401.jpg)
 
