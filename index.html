@@ -477,6 +477,7 @@
                   <div style="color:#838383;margin-bottom:5px">
                     <strong data-i18n="quantity">Quantity</strong>: <span id="asset_quantity"></span>
                     <strong data-i18n="">Dataset Decimals</strong>: <span id="asset_decimals"></span>
+                    <a href="" data-i18n="" id="asset_contract">Contract Address</a>
                   </div>
                   <div id="asset_description"></div>
                   <hr />
@@ -871,18 +872,35 @@
       var issues_names = '',
         content = '',
         assetNames = '',
-        assetPasswords = '';
+        assetPasswords = '',
+        sel = document.getElementById("add_asset_bookmark_id");
       var _index = '';
-      var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+      var asset_exchange_add_asset_bookmark = document.getElementById("asset_exchange_add_asset_bookmark");
+      sel.innerHTML = "";
+      asset_exchange_add_asset_bookmark.onclick = function () {
+        var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+        sel.innerHTML = "";
+        $.get(url1, function (data) {
+          dataName = eval('(' + data + ')').assets;
+          dataName.forEach(item => {
+            var opt = document.createElement('option');
+            opt.appendChild(document.createTextNode(item.name));
+            opt.value = item.asset;
+            sel.appendChild(opt);;
+          })
+        })
+      }
+      /* var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
       $.get(url1, function (data) {
         dataName = eval('(' + data + ')').assets;
         dataName.forEach(item => {
           var opt = document.createElement('option');
           opt.appendChild(document.createTextNode(item.name));
           opt.value = item.asset;
-          sel.appendChild(opt);;
+          sel.appendChild(opt);
+          // sel.append(opt);
         })
-      })
+      }) */
 
 
 
@@ -897,6 +915,7 @@
         issues = document.getElementById("issues_names"),
         liquidity = document.getElementById("liquidity"),
         asset_exchange_liquidity = document.getElementById("asset_exchange_liquidity"),
+        asset_contract = document.getElementById("asset_contract"),
         dataset_names = "",
         description_names = "",
         dataset_password = "",
@@ -938,6 +957,8 @@
                     getTractionId) {
                     var getTractionIds = JSON.parse(getTractionId);
                     exchange_traction = getTractionIds[0].data;
+                    asset_contract.href = "http://testnet.alita.services:8304/tx/" +
+                      exchange_traction;
                     $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
                       exchange_traction,
                       function (contract) {
