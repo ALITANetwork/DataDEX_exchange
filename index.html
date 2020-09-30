@@ -477,7 +477,7 @@
                   <div style="color:#838383;margin-bottom:5px">
                     <strong data-i18n="quantity">Quantity</strong>: <span id="asset_quantity"></span>
                     <strong data-i18n="">Dataset Decimals</strong>: <span id="asset_decimals"></span>
-                    <a href="" data-i18n="" id="asset_contract">Contract Address</a>
+                    <a href="" data-i18n="" id="asset_contract" target="_blank"></a>
                   </div>
                   <div id="asset_description"></div>
                   <hr />
@@ -916,6 +916,7 @@
         liquidity = document.getElementById("liquidity"),
         asset_exchange_liquidity = document.getElementById("asset_exchange_liquidity"),
         asset_contract = document.getElementById("asset_contract"),
+        asset_contract_id=document.getElementById("asset_contract_id"),
         dataset_names = "",
         description_names = "",
         dataset_password = "",
@@ -957,6 +958,9 @@
                     getTractionId) {
                     var getTractionIds = JSON.parse(getTractionId);
                     exchange_traction = getTractionIds[0].data;
+                    var contentStr=``;
+                    contentStr=`Contract Address：<span id="asset_contract_id">${exchange_traction}</span>`
+                    asset_contract.innerHTML=contentStr;
                     asset_contract.href = "http://testnet.alita.services:8304/tx/" +
                       exchange_traction;
                     $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
