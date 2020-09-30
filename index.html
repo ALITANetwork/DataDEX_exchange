@@ -959,7 +959,7 @@
                     var getTractionIds = JSON.parse(getTractionId);
                     exchange_traction = getTractionIds[0].data;
                     var contentStr=``;
-                    contentStr=`Contract Address：<span id="asset_contract_id">${exchange_traction}</span>`
+                    contentStr=`Contract Address：<span id="asset_contract_id" style="color:#969494">${exchange_traction}</span>`
                     asset_contract.innerHTML=contentStr;
                     asset_contract.href = "http://testnet.alita.services:8304/tx/" +
                       exchange_traction;
