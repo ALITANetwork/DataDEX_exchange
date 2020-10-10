@@ -37,3 +37,9 @@ blockchain browser
 
 ![Alt text](./1601434272.jpg)
 
+在这里申请测试Token:
+
+https://s.surveyplanet.com/ouJKU3KF7
+
+
+
