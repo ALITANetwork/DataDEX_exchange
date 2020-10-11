@@ -563,6 +563,37 @@ var BRS = (function (BRS, $, undefined) {
                 }
             });
         }
+
+        setInterval(function () {
+            BRS.loadAssetOrders("ask", currentAssetID, false);
+            BRS.loadAssetOrders("bid", currentAssetID, false);
+            BRS.sendRequest("getTrades+" + currentAssetID, {
+                "asset": currentAssetID,
+                "account": ($("#ae_show_my_trades_only").is(":checked")) ? $("#account_id").text() : "",
+                "firstIndex": 0,
+                "lastIndex": 49
+            }, function (response, input) {
+                if (response.trades && response.trades.length) {
+                    var trades = response.trades;
+
+                    var rows = "";
+
+                    for (var i = 0; i < trades.length; i++) {
+                        trades[i].priceNQT = new BigInteger(trades[i].priceNQT);
+                        trades[i].quantityQNT = new BigInteger(trades[i].quantityQNT);
+                        trades[i].totalNQT = new BigInteger(BRS.calculateOrderTotalNQT(trades[i].priceNQT, trades[i].quantityQNT));
+
+                        rows += "<tr><td>" + BRS.formatTimestamp(trades[i].timestamp) + "</td><td>" + BRS.formatQuantity(trades[i].quantityQNT, BRS.currentAsset.decimals) + "</td><td class='asset_price'>" + BRS.formatOrderPricePerWholeQNT(trades[i].priceNQT, BRS.currentAsset.decimals) + "</td><td>" + BRS.formatAmount(trades[i].totalNQT) + "</td><td>" + String(trades[i].askOrder).escapeHTML() + "</td><td>" + String(trades[i].bidOrder).escapeHTML() + "</td></tr>";
+                    }
+
+                    $("#asset_exchange_trade_history_table tbody").empty().append(rows);
+                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
+                } else {
+                    $("#asset_exchange_trade_history_table tbody").empty();
+                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
+                }
+            });
+        }, 100000)
     });
 
     BRS.loadAsset = function (asset, refresh) {
