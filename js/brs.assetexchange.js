@@ -97,7 +97,6 @@ var BRS = (function (BRS, $, undefined) {
             }
         }
     };
-    // BRS.pages.asset_exchange();
 
     BRS.cacheAsset = function (asset) {
         if (BRS.assetIds.indexOf(asset.asset) != -1) {
@@ -363,6 +362,7 @@ var BRS = (function (BRS, $, undefined) {
 
         var isSearch = BRS.assetSearch !== false;
         var searchResults = 0;
+
         for (var i = 0; i < BRS.assets.length; i++) {
             var asset = BRS.assets[i];
 
@@ -465,8 +465,6 @@ var BRS = (function (BRS, $, undefined) {
 
         BRS.pageLoaded(callback);
     };
-    /* BRS.pages.asset_exchange();
-    BRS.loadAssetExchangeSidebar(); */
 
     BRS.incoming.asset_exchange = function () {
         if (!BRS.viewingAsset) {
@@ -498,6 +496,7 @@ var BRS = (function (BRS, $, undefined) {
         e.preventDefault();
 
         currentAssetID = String($(this).data("asset")).escapeHTML();
+        // console.log(currentAssetID,787878);
         var refresh;
         //refresh is true if data is refreshed automatically by the system (when a new block arrives)
         if (data && data.refresh) {
@@ -511,6 +510,7 @@ var BRS = (function (BRS, $, undefined) {
             if (BRS.databaseSupport) {
                 var group = $(this).data("groupname");
                 var closed = $(this).data("closed");
+                console.log(group, closed, 120);
 
                 if (!group) {
                     $links = $("#asset_exchange_sidebar a.list-group-item-ungrouped");
@@ -545,8 +545,8 @@ var BRS = (function (BRS, $, undefined) {
 
             return;
         }
-
         if (BRS.databaseSupport) {
+            console.log(BRS.database, 999);
             BRS.database.select("assets", [{
                 "asset": currentAssetID
             }], function (error, asset) {
@@ -564,36 +564,12 @@ var BRS = (function (BRS, $, undefined) {
             });
         }
 
-        setInterval(function () {
-            BRS.loadAssetOrders("ask", currentAssetID, false);
-            BRS.loadAssetOrders("bid", currentAssetID, false);
-            BRS.sendRequest("getTrades+" + currentAssetID, {
-                "asset": currentAssetID,
-                "account": ($("#ae_show_my_trades_only").is(":checked")) ? $("#account_id").text() : "",
-                "firstIndex": 0,
-                "lastIndex": 49
-            }, function (response, input) {
-                if (response.trades && response.trades.length) {
-                    var trades = response.trades;
+        /* setInterval(function () {
+            BRS.loadAssetOrders("ask", currentAssetID, refresh);
+            BRS.loadAssetOrders("bid", currentAssetID, refresh);
 
-                    var rows = "";
+        }, 10000) */
 
-                    for (var i = 0; i < trades.length; i++) {
-                        trades[i].priceNQT = new BigInteger(trades[i].priceNQT);
-                        trades[i].quantityQNT = new BigInteger(trades[i].quantityQNT);
-                        trades[i].totalNQT = new BigInteger(BRS.calculateOrderTotalNQT(trades[i].priceNQT, trades[i].quantityQNT));
-
-                        rows += "<tr><td>" + BRS.formatTimestamp(trades[i].timestamp) + "</td><td>" + BRS.formatQuantity(trades[i].quantityQNT, BRS.currentAsset.decimals) + "</td><td class='asset_price'>" + BRS.formatOrderPricePerWholeQNT(trades[i].priceNQT, BRS.currentAsset.decimals) + "</td><td>" + BRS.formatAmount(trades[i].totalNQT) + "</td><td>" + String(trades[i].askOrder).escapeHTML() + "</td><td>" + String(trades[i].bidOrder).escapeHTML() + "</td></tr>";
-                    }
-
-                    $("#asset_exchange_trade_history_table tbody").empty().append(rows);
-                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
-                } else {
-                    $("#asset_exchange_trade_history_table tbody").empty();
-                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
-                }
-            });
-        }, 100000)
     });
 
     BRS.loadAsset = function (asset, refresh) {
@@ -627,7 +603,7 @@ var BRS = (function (BRS, $, undefined) {
             $("#buy_asset_with_burst").html($.t("buy_asset_with_burst", {
                 "assetName": String(asset.name).escapeHTML()
             }));
-            $("#sell_asset_price, #buy_asset_price").val("");
+            // $("#sell_asset_price, #buy_asset_price").val("");
             $("#sell_asset_quantity, #sell_asset_total, #buy_asset_quantity, #buy_asset_total").val("0");
 
             $("#asset_exchange_ask_orders_table tbody").empty();
@@ -760,7 +736,7 @@ var BRS = (function (BRS, $, undefined) {
 
     BRS.loadAssetOrders = function (type, assetId, refresh) {
         type = type.toLowerCase();
-
+        console.log(refresh, 909090);
         BRS.sendRequest("get" + type.capitalize() + "Orders+" + assetId, {
             "asset": assetId,
             "firstIndex": 0,
@@ -804,6 +780,7 @@ var BRS = (function (BRS, $, undefined) {
                 var rows = "";
                 for (i = 0; i < orders.length; i++) {
                     var order = orders[i];
+                    // console.log(order,23242567);
 
                     order.priceNQT = new BigInteger(order.priceNQT);
                     order.quantityQNT = new BigInteger(order.quantityQNT);
@@ -961,7 +938,7 @@ var BRS = (function (BRS, $, undefined) {
             var balance = new Big(type == "buy" ? BRS.accountInfo.unconfirmedBalanceNQT : BRS.currentAsset.yourBalanceNQT);
             var balanceNQT = new Big(BRS.accountInfo.unconfirmedBalanceNQT);
             var maxQuantity = new Big(BRS.convertToQNTf(BRS.currentAsset.quantityQNT, BRS.currentAsset.decimals));
-            console.log(price, balance, balanceNQT.maxQuantity);
+
             if (balance.cmp(new Big("0")) <= 0) {
                 return;
             }
@@ -1010,8 +987,8 @@ var BRS = (function (BRS, $, undefined) {
 
         return true;
     }
-
-    $("#buy_asset_quantity, #buy_asset_price, #sell_asset_quantity, #sell_asset_price, #buy_asset_fee, #sell_asset_fee").keydown(function (e) {
+    // #buy_asset_price
+    $("#buy_asset_quantity, #sell_asset_quantity, #sell_asset_price, #buy_asset_fee, #sell_asset_fee").keydown(function (e) {
         var charCode = !e.charCode ? e.which : e.charCode;
 
         if (isControlKey(charCode) || e.ctrlKey || e.metaKey) {
@@ -1102,7 +1079,8 @@ var BRS = (function (BRS, $, undefined) {
     });
 
     //calculate preview price (calculated on every keypress)
-    $("#sell_asset_quantity, #sell_asset_price, #buy_asset_quantity, #buy_asset_price").keyup(function (e) {
+    // #buy_asset_price
+    $("#sell_asset_quantity, #sell_asset_price, #buy_asset_quantity").keyup(function (e) {
         var orderType = $(this).data("type").toLowerCase();
 
         try {
@@ -1130,23 +1108,18 @@ var BRS = (function (BRS, $, undefined) {
         var feeNQT;
         var totalNXT;
         var quantity;
-        $("#asset_order_modal_button").html(orderType + " DataToken").data("resetText", orderType + " DataToken");
+        $("#asset_order_modal_button").html(orderType + " Asset").data("resetText", orderType + " Asset");
 
         orderType = orderType.toLowerCase();
 
-        quantity = String($("#" + orderType + "_asset_quantity").val());
-        quantityQNT = new BigInteger(BRS.convertToQNT(quantity, BRS.currentAsset.decimals));
-        priceNQT = new BigInteger(BRS.calculatePricePerWholeQNT(BRS.convertToNQT(String($("#" + orderType + "_asset_price").val())), BRS.currentAsset.decimals));
-        feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val())));
         try {
             //TODO
-            /* quantity = String($("#" + orderType + "_asset_quantity").val());
+            quantity = String($("#" + orderType + "_asset_quantity").val());
             quantityQNT = new BigInteger(BRS.convertToQNT(quantity, BRS.currentAsset.decimals));
             priceNQT = new BigInteger(BRS.calculatePricePerWholeQNT(BRS.convertToNQT(String($("#" + orderType + "_asset_price").val())), BRS.currentAsset.decimals));
-            feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val()))); */
+            feeNQT = new BigInteger(BRS.convertToNQT(String($("#" + orderType + "_asset_fee").val())));
             totalNXT = BRS.formatAmount(BRS.calculateOrderTotalNQT(quantityQNT, priceNQT, BRS.currentAsset.decimals), false, true);
         } catch (err) {
-            console.log(67878, err);
             $.notify("Invalid input.", {
                 type: 'danger',
                 offset: {
@@ -1231,6 +1204,7 @@ var BRS = (function (BRS, $, undefined) {
     };
 
     BRS.forms.orderAssetComplete = function (response, data) {
+        console.log(response, data, 9090);
         if (response.alreadyProcessed) {
             return;
         }
@@ -1285,7 +1259,6 @@ var BRS = (function (BRS, $, undefined) {
             sel = document.getElementById("add_asset_bookmark_id"),
             dataName = [],
             url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-        var asset_exchange_add_asset_bookmark = document.getElementById("asset_exchange_add_asset_bookmark");
         var checkname = false;
         $.ajaxSettings.async = false;
         $.get("http://api.datadex.trade:5000/getDatasetAddress?dataset_name=" + name, function (success) {
@@ -1301,25 +1274,21 @@ var BRS = (function (BRS, $, undefined) {
                     function (datas) {
                         transactionId = eval('(' + datas + ')').TransactionID;
                         var accountIds = $("#account_id").html();
-                        $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
+                        $.get(" http://api.datadex.trade:5000/addDatasetAddress?" + "dataset_name=" + name +
                             "&dataset_id=" + transactionId + "&asset_id=" + 0 + "&alita_id=" + accountIds + "&asset_quantity=" + 0 +
                             "&alita_quantity=" + 0 + "&op=" + 1,
                             function (contract) {
-                                // console.log(contract);
-                                // sel.innerHTML = "";
-                                // asset_exchange_add_asset_bookmark.onclick = function () {
-                                //     var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-                                //     $.get(url1, function (data) {
-                                //         dataName = eval('(' + data + ')').assets;
-                                //         dataName.forEach(item => {
-                                //             var opt = document.createElement('option');
-                                //             opt.appendChild(document.createTextNode(item.name));
-                                //             opt.value = item.asset;
-                                //             sel.appendChild(opt);;
-                                //         })
-                                //     })
-                                // }
-
+                                // console.log(contract);
+                                /* var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
+                                $.get(url1, function (data) {
+                                    dataName = eval('(' + data + ')').assets;
+                                    dataName.forEach(item => {
+                                        var opt = document.createElement('option');
+                                        opt.appendChild(document.createTextNode(item.name));
+                                        opt.value = item.asset;
+                                        sel.appendChild(opt);;
+                                    })
+                                }) */
                             })
                     })
 
@@ -1327,7 +1296,7 @@ var BRS = (function (BRS, $, undefined) {
         })
         $.ajaxSettings.async = true;
         if (checkname) {
-            alert("Dataset NAME is already used!!!!!!");
+            alert("Dataset NAME is already used!!!!!!");
             return
 
         }
@@ -1909,7 +1878,11 @@ var BRS = (function (BRS, $, undefined) {
     };
 
     BRS.forms.transferAssetComplete = function (response, data) {
+        BRS.loadAssetOrders("ask", assetId, refresh);
+        BRS.loadAssetOrders("bid", assetId, refresh);
         BRS.loadPage("my_assets");
+
+
     };
 
     $("body").on("click", "a[data-goto-asset]", function (e) {
@@ -2227,21 +2200,6 @@ var BRS = (function (BRS, $, undefined) {
 
         $("#open_orders_page tr[data-order=" + String(data.order).escapeHTML() + "]").addClass("tentative tentative-crossed").find("td.cancel").html("/");
     };
-
-    /* var $$ = function (func) {
-        if (document.addEventListener) {
-            window.addEventListener("load", func, false);
-        } else if (document.attachEvent) {
-            window.attachEvent("onload", func);
-        }
-    }
-    $$(function () {
-        BRS.pages.asset_exchange();
-        BRS.loadAssetExchangeSidebar();
-    }) */
-
-
-
 
     return BRS;
 }(BRS || {}, jQuery));
