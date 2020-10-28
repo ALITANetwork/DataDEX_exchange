@@ -493,12 +493,6 @@ var BRS = (function (BRS, $, undefined) {
     };
 
     $("#asset_exchange_sidebar").on("click", "a", function (e, data) {
-        console.log(this, 5555555);
-        var priceLast = '';
-        priceLast = localStorage.getItem("price");
-        var Alist = document.querySelectorAll("#asset_exchange_sidebar_content a"),
-            listtitle = document.querySelectorAll("#asset_exchange_sidebar_content a .list-group-item-heading"),
-            issues = document.getElementById("issues_names");
         e.preventDefault();
 
         currentAssetID = String($(this).data("asset")).escapeHTML();
@@ -570,89 +564,11 @@ var BRS = (function (BRS, $, undefined) {
             });
         }
 
-        setInterval(function () {
+        /* setInterval(function () {
             BRS.loadAssetOrders("ask", currentAssetID, refresh);
             BRS.loadAssetOrders("bid", currentAssetID, refresh);
-            BRS.sendRequest("getTrades+" + currentAssetID, {
-                "asset": currentAssetID,
-                "account": ($("#ae_show_my_trades_only").is(":checked")) ? $("#account_id").text() : "",
-                "firstIndex": 0,
-                "lastIndex": 49
-            }, function (response, input) {
-                if (response.trades && response.trades.length) {
-                    var trades = response.trades;
 
-                    var rows = "";
-
-                    for (var i = 0; i < trades.length; i++) {
-                        trades[i].priceNQT = new BigInteger(trades[i].priceNQT);
-                        trades[i].quantityQNT = new BigInteger(trades[i].quantityQNT);
-                        trades[i].totalNQT = new BigInteger(BRS.calculateOrderTotalNQT(trades[i].priceNQT, trades[i].quantityQNT));
-
-                        rows += "<tr><td>" + BRS.formatTimestamp(trades[i].timestamp) + "</td><td>" + BRS.formatQuantity(trades[i].quantityQNT, BRS.currentAsset.decimals) + "</td><td class='asset_price'>" + BRS.formatOrderPricePerWholeQNT(trades[i].priceNQT, BRS.currentAsset.decimals) + "</td><td>" + BRS.formatAmount(trades[i].totalNQT) + "</td><td>" + String(trades[i].askOrder).escapeHTML() + "</td><td>" + String(trades[i].bidOrder).escapeHTML() + "</td></tr>";
-                    }
-
-                    $("#asset_exchange_trade_history_table tbody").empty().append(rows);
-                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
-                } else {
-                    $("#asset_exchange_trade_history_table tbody").empty();
-                    BRS.dataLoadFinished($("#asset_exchange_trade_history_table"), !refresh);
-                }
-            });
-        }, 50000)
-        setInterval(function () {
-            accountId = $("#account_id").html();
-            Array.from(Alist).forEach((item, index) => {
-                item.onclick = function () {
-                    asset_exchange_liquidity.style.display = "inline-block";
-                    content = $(item).attr("data-asset");
-                    accountId = $("#account_id").html();
-
-                    Array.from(listtitle).forEach((res, title) => {
-                        if (this == res) {
-                            data_names = res.innerHTML;
-                            var temp = res.innerHTML.toUpperCase();
-                            setNameContent.innerHTML = temp;
-                            issues.setAttribute("placeholder", temp);
-                            $.get("http://api.datadex.trade:5000/getDatasetAddress?" + "dataset_name=" + data_names,
-                                function (
-                                    getTractionId) {
-                                    var getTractionIds = JSON.parse(getTractionId);
-                                    exchange_traction = getTractionIds[0].data;
-                                    $.get("http://wallet.alita.services:8125/burst?requestType=getAT" + "&at=" +
-                                        exchange_traction,
-                                        function (contract) {
-                                            contracts = JSON.parse(contract).atRS;
-                                            var accountIds = $("#account_id").html();
-                                            $.get("http://wallet.alita.services:8125/burst?requestType=getAccount" +
-                                                "&account=" + accountIds + "&_=" + new Date().getTime(),
-                                                function (public) {
-                                                    publicKeys = eval('(' + public + ')').publicKey;
-                                                    $.get("http://api.datadex.trade:5000/getContractFunction?" +
-                                                        "ContractId=" +
-                                                        contracts,
-                                                        function (data) {
-                                                            console.log(data);
-                                                            var dataAll = JSON.parse(data),
-                                                                datas = dataAll[0].data[0];
-                                                            console.log(datas);
-                                                            $("#buy_asset_price").val(
-                                                                `${dataAll[0].state=="failed"?"0":datas.price}`);
-                                                            $("#sell_asset_price").val(
-                                                                `${dataAll[0].state=="failed"?"0":datas.price}`);
-                                                            localStorage.setItem("price", `${datas.price}`);
-                                                        })
-
-
-                                                })
-                                        })
-                                })
-                        }
-                    })
-                }
-            })
-        }, 50500)
-
+        }, 10000) */
 
     });
 
@@ -1072,7 +988,7 @@ var BRS = (function (BRS, $, undefined) {
         return true;
     }
     // #buy_asset_price
-    $("#buy_asset_quantity, #sell_asset_quantity, #sell_asset_price, #buy_asset_fee, #sell_asset_fee,#buy_asset_price").keydown(function (e) {
+    $("#buy_asset_quantity, #sell_asset_quantity, #sell_asset_price, #buy_asset_fee, #sell_asset_fee").keydown(function (e) {
         var charCode = !e.charCode ? e.which : e.charCode;
 
         if (isControlKey(charCode) || e.ctrlKey || e.metaKey) {
