@@ -496,7 +496,6 @@ var BRS = (function (BRS, $, undefined) {
         e.preventDefault();
 
         currentAssetID = String($(this).data("asset")).escapeHTML();
-        // console.log(currentAssetID,787878);
         var refresh;
         //refresh is true if data is refreshed automatically by the system (when a new block arrives)
         if (data && data.refresh) {
@@ -546,7 +545,6 @@ var BRS = (function (BRS, $, undefined) {
             return;
         }
         if (BRS.databaseSupport) {
-            console.log(BRS.database, 999);
             BRS.database.select("assets", [{
                 "asset": currentAssetID
             }], function (error, asset) {
@@ -603,7 +601,7 @@ var BRS = (function (BRS, $, undefined) {
             $("#buy_asset_with_burst").html($.t("buy_asset_with_burst", {
                 "assetName": String(asset.name).escapeHTML()
             }));
-            // $("#sell_asset_price, #buy_asset_price").val("");
+            $("#sell_asset_price, #buy_asset_price").val("");
             $("#sell_asset_quantity, #sell_asset_total, #buy_asset_quantity, #buy_asset_total").val("0");
 
             $("#asset_exchange_ask_orders_table tbody").empty();

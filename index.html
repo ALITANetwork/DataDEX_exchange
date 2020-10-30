@@ -47,331 +47,6 @@
 </head>
 
 <body class="theme-blue sidebar-mini">
-  <!-- lockscreen moved to html/page/lockscreen.html -->
-  <!-- X -->
-  <!-- <div id="asset_exchange_page" class="page">
-    <section class="content-header">
-      <h1 data-i18n="asset_exchange" style="width: 11.5%;background-color: plum;">Asset Exchange</h1>
-      <div style="position:absolute;top:9px;right:9px;">
-        <span type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_bookmark" data-toggle="modal"
-          data-target="#issue_asset_modal">Issue Asset</span>
-        <button type="button" class="btn btn-sm btn-default" id="asset_exchange_add_asset_bookmark" data-toggle="modal"
-          data-target="#add_asset_bookmark_modal" data-i18n="add_asset">Add Asset</button>
-        <button type="button" class="btn btn-sm btn-default" id="asset_exchange_bookmark_this_asset"
-          style="display:none" data-i18n="bookmark_asset">Bookmark This Asset</button>
-        <button type="button" class="btn btn-sm btn-default" id="asset_exchange_clear_search" style="display:none"
-          data-i18n="clear_search_results">Clear Search Results</button>
-      </div>
-    </section>
-    <section class="content content-stretch"
-      style="position:fixed;margin-top:3px;padding:0; width:100%; height:100%; height: calc(100% - 101px);overflow:hidden;">
-      <div class="content-spliter">
-        <div class="content-splitter-inner">
-          <div class="content-splitter-sidebar" style="width:200px">
-            <div class="content-splitter-sidebar-inner">
-              <div class="list-group unselectable sidebar_context" id="asset_exchange_sidebar">
-                <div id="asset_exchange_sidebar_search">
-                  <form action="#" method="get" class="form" id="asset_exchange_search" autocomplete="off">
-                    <div class="input-group">
-                      <input type="text" name="q" class="form-control" placeholder="Search Assets..."
-                        data-i18n="[placeholder]search_assets">
-                      <span class="input-group-btn">
-                        <button type="submit" name="search" class="btn btn-flat" style="padding-left:3px"><i
-                            class="fas fa-search"></i></button>
-                      </span>
-                    </div>
-                  </form>
-                </div>
-                <div id="asset_exchange_sidebar_content">
-                  <div style="text-align:center;padding-top:10px;"><span data-i18n="loading_please_wait">Loading, please
-                      wait</span><span id="loading_dots"><span>.</span><span>.</span><span>.</span></span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="content-splitter-right">
-            <div class="content-splitter-right-inner">
-              <div id="no_assets_available" style="padding-top: 150px;text-align:center;display:none;"
-                data-i18n="no_assets_available">You don't have any assets in your bookmark list yet.
-                Click on "Add Asset" in the top right corner to add one.</div>
-              <div id="no_asset_search_results" style="padding-top: 150px;text-align:center;display:none;"
-                data-i18n="no_asset_search_results">No assets found that match search query.</div>
-              <div id="no_asset_selected" style="padding-top: 150px;text-align:center;" data-i18n="no_asset_selected">
-                Please select an asset in the left sidebar.</div>
-              <div id="loading_asset_data" style="padding-top: 150px;text-align:center;display: none;">
-                <span data-i18n="asset_data_loading">Asset data loading, please
-                  wait...</span><br /><br /><i class="fas fa-circle-notch fa-spin fa-3x" style="display: block;"></i>
-              </div>
-              <div id="asset_details" style="display:none;">
-                <div class="alert alert-danger alert-no-icon" id="asset_exchange_duplicates_warning"
-                  style="display:none" data-i18n="[html]asset_exchange_duplicates_warning"></div>
-                <div
-                  style="float:right;color: #999999;background:white;padding:5px;border:1px solid #ccc;border-radius:3px">
-                  <strong data-i18n="account">Account</strong>: <span id="asset_account"></span><br />
-                  <span id="asset_id_dropdown" class="dropdown" style="margin-bottom:0;">
-                    <strong data-i18n="asset_id">Asset Id</strong>: &nbsp;<a href="#" id="asset_id"
-                      class="dropdown-toggle" data-toggle="dropdown"></a>
-                    <ul class="dropdown-menu" role="menu" style="right:0;left:auto;text-align:left;">
-                      <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
-                          data-type="asset_id" data-i18n="copy_asset_id">Copy Asset
-                          ID</a></li>
-                      <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
-                          data-type="asset_link" data-i18n="copy_asset_link">Copy
-                          Asset Link</a></li>
-                    </ul>
-                  </span>
-                </div>
-                <h3 style="margin-top:0" id="asset_name"></h3>
-                <div style="color:#838383;margin-bottom:5px">
-                  <strong data-i18n="quantity">Quantity</strong>: <span id="asset_quantity"></span>
-                  <strong data-i18n="asset_decimals">Asset Decimals</strong>: <span id="asset_decimals"></span>
-                </div>
-                <div id="asset_description"></div>
-                <hr />
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="box box-solid box-info collapsed-box" id="buy_asset_box">
-                      <div class="box-header" style="background-color:#DFF0D9;color: #48AB6C;">
-                        <h3 class="box-title" id="buy_asset_with_burst"></h3>
-                        <div class="box-tools pull-right">
-                          <button class="btn btn-info btn-sm" style="background-color: #48AB6C"><i
-                              class="fas fa-plus"></i></button>
-                        </div>
-                      </div>
-                      <div class="box-body no-padding" style="display:none">
-                        <div
-                          style="background-color:#DFF0D9;color: #666;padding-left:10px;padding-right: 10px;padding-top: 0px;padding-bottom:3px;"
-                          id="buy_automatic_price"><strong data-i18n="balance">Balance</strong>: <span
-                            id="your_burst_balance"></span> ALITA</div>
-                        <form role="form" class="form-horizontal"
-                          style="padding: 10px;;max-width:350px;margin-left:auto;margin-right:auto;" autocomplete="off">
-                          <div style="margin-left:-20px">
-                            <div class="form-group">
-                              <label for="buy_asset_quantity" class="col-sm-3 control-label"
-                                data-i18n="quantity">Quantity</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input id="buy_asset_quantity" type="text" name="buy_asset_quantity" value="0"
-                                    class="form-control" data-type="buy" />
-                                  <span class="input-group-addon"><span class="asset_name"></span></span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="buy_asset_price" class="col-sm-3 control-label"
-                                data-i18n="price">Price</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input id="buy_asset_price" type="text" value="0" name="buy_asset_price"
-                                    class="form-control" data-type="buy" />
-                                  <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="buy_asset_total" class="col-sm-3 control-label"
-                                data-i18n="total">Total</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input type="text" name="buy_asset_total" id="buy_asset_total" readonly value="0"
-                                    class="form-control disabled" />
-                                  <span class="input-group-addon">ALITA</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="buy_asset_fee" class="col-sm-3 control-label" data-i18n="fee">Fee</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input type="text" id="buy_asset_fee" name="buy_asset_fee" value="1"
-                                    class="form-control" />
-                                  <span class="input-group-addon">ALITA</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group form-group-last">
-                              <div class="col-sm-3"></div>
-                              <div class="col-sm-9">
-                                <button type="button" class="btn btn-primary btn-lg btn-block" id="buy_asset_button"
-                                  data-toggle="modal" data-target="#asset_order_modal" data-asset=""
-                                  data-type="Buy"><span data-i18n="buy">Buy</span>
-                                  (ALITA → <span class="asset_name"></span>)</button>
-                              </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="box box-danger" style="min-height:400px;max-height: 400px;overflow: auto;;">
-                      <div class="box-header">
-                        <h3 class="box-title"><span data-i18n="sell_orders">Sell Orders</span>
-                          <span id="sell_orders_count"></span></h3>
-                      </div>
-                      <div class="box-body no-padding">
-                        <div class="data-container data-loading" data-no-padding="true">
-                          <table class="table table-striped" id="asset_exchange_ask_orders_table">
-                            <thead>
-                              <tr>
-                                <th data-i18n="account">Account</th>
-                                <th data-i18n="quantity">Quantity</th>
-                                <th data-i18n="price">Price</th>
-                                <th data-i18n="total">Total</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                          </table>
-                          <div class="data-loading-container"><i class="fas fa-circle-notch fa-spin fa-3x"
-                              style="display: block;"></i></div>
-                          <div class="data-empty-container">
-                            <p data-i18n="no_sell_orders_for_asset">No sell orders for this
-                              asset.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="box box-solid box-info collapsed-box" id="sell_asset_box">
-                      <div class="box-header" style="background:#F2DEDE;color:#ED4348;">
-                        <h3 class="box-title" id="sell_asset_for_burst"></h3>
-                        <div class="box-tools pull-right">
-                          <button class="btn btn-info btn-sm" style="background-color: #ED4348"> <i
-                              class="fas fa-plus"></i></button>
-                        </div>
-                      </div>
-                      <div class="box-body no-padding" style="display:none">
-                        <div
-                          style="background-color:#F2DEDE;color: #666;padding-left:10px;padding-right: 10px;padding-top: 0px;padding-bottom:3px;"
-                          id="sell_automatic_price"><strong data-i18n="balance">Balance</strong>: <span
-                            id="your_asset_balance"></span> <span class="asset_name"></span>
-                        </div>
-                        <form role="form" class="form-horizontal"
-                          style="padding: 10px;max-width:350px;margin-left:auto;margin-right:auto;" autocomplete="off">
-                          <div style="margin-left:-20px">
-                            <div class="form-group">
-                              <label for="sell_asset_quantity" class="col-sm-3 control-label"
-                                data-i18n="quantity">Quantity</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input id="sell_asset_quantity" type="text" name="sell_asset_quantity" value="0"
-                                    class="form-control" data-type="sell" />
-                                  <span class="input-group-addon"><span class="asset_name"></span></span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="sell_asset_price" class="col-sm-3 control-label"
-                                data-i18n="price">Price</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input id="sell_asset_price" type="text" value="0" name="sell_asset_price"
-                                    class="form-control" data-type="sell" />
-                                  <span class="input-group-addon">ALITA / <span class="asset_name"></span></span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="sell_asset_total" class="col-sm-3 control-label"
-                                data-i18n="total">Total</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input type="text" name="sell_asset_total" id="sell_asset_total" readonly value="0"
-                                    class="form-control disabled" />
-                                  <span class="input-group-addon">ALITA</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label for="sell_asset_fee" class="col-sm-3 control-label" data-i18n="fee">Fee</label>
-                              <div class="col-sm-9">
-                                <div class="input-group">
-                                  <input type="text" id="sell_asset_fee" name="sell_asset_fee" value="1"
-                                    class="form-control" />
-                                  <span class="input-group-addon">ALITA</span>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="form-group form-group-last">
-                              <div class="col-sm-3"></div>
-                              <div class="col-sm-9">
-                                <button type="button" class="btn btn-primary btn-lg btn-block" id="sell_asset_button"
-                                  data-toggle="modal" data-target="#asset_order_modal" data-asset=""
-                                  data-type="Sell"><span data-i18n="sell">Sell</span>
-                                  (<span class="asset_name"></span> → ALITA)</button>
-                              </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="box box-success" style="min-height:400px;max-height: 400px;overflow: auto;">
-                      <div class="box-header">
-                        <h3 class="box-title"><span data-i18n="buy_orders">Buy Orders</span>
-                          <span id="buy_orders_count"></span></h3>
-                      </div>
-                      <div class="box-body no-padding">
-                        <div class="data-container data-loading" data-no-padding="true">
-                          <table class="table table-striped" id="asset_exchange_bid_orders_table">
-                            <thead>
-                              <tr>
-                                <th data-i18n="account">Account</th>
-                                <th data-i18n="quantity">Quantity</th>
-                                <th data-i18n="price">Price</th>
-                                <th data-i18n="total">Total</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                          </table>
-                          <div class="data-loading-container"><i class="fas fa-circle-notch fa-spin fa-3x"
-                              style="display: block;"></i></div>
-                          <div class="data-empty-container">
-                            <p data-i18n="no_buy_orders_for_asset">No buy orders for this
-                              asset.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="box box-primary" style="max-height:500px;overflow:auto;margin-bottom:10px;">
-                  <div class="box-header">
-                    <h3 class="box-title" data-i18n="trade_history">Trade History</h3>
-                    <label class="show-my-trades-only"><input id="ae_show_my_trades_only" type="checkbox"> Show only my
-                      trades.</label>
-                  </div>
-                  <div class="box-body no-padding">
-                    <div class="data-container data-loading" data-no-padding="true">
-                      <table class="table table-striped" id="asset_exchange_trade_history_table">
-                        <thead>
-                          <tr>
-                            <th data-i18n="date">Date</th>
-                            <th data-i18n="quantity">Quantity</th>
-                            <th data-i18n="price">Price</th>
-                            <th data-i18n="total">Total</th>
-                            <th data-i18n="ask_order_id">Ask Order ID</th>
-                            <th data-i18n="bid_order_id">Bid Order ID</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                      <div class="data-loading-container"><i class="fas fa-circle-notch fa-spin fa-3x"
-                          style="display: block;"></i></div>
-                      <div class="data-empty-container">
-                        <p data-i18n="no_trade_history">No trade history available.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div> -->
 
   <div id="page" class="wrapper row-offcanvas row-offcanvas-left" style="background-color: #dce1e4;">
     <!-- <button onclick="BRS.pages.asset_exchange();BRS.loadAssetExchangeSidebar()">Onclick</button> -->
@@ -384,16 +59,6 @@
           <div id="account_id_dropdown" class="dropdown">
             <span id="account_id" class="dropdown-toggle" data-toggle="dropdown" data-type="account_id"
               style="color: #fff;z-index: 9999;"></span>
-            <!-- <ul class="sbdropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#" data-type="account_rs"
-                data-i18n="copy_account_id">Copy Account ID</a></li>
-            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
-                data-type="account_id">Copy Numeric Account ID</a></li>
-            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#"
-                data-type="message_link" data-i18n="copy_send_message_link">Copy "Send Message" Link</a></li>
-            <li role="presentation"><a class="copy_link" role="menuitem" tabindex="-1" href="#" data-type="send_link"
-                data-i18n="copy_send_burst_link">Copy "Send ALITA" Link</a></li>
-          </ul> -->
           </div>
         </div>
       </div>
@@ -809,48 +474,13 @@
   <script type="text/javascript">
     BRS.loadLockscreenHTML("html/pages/lockscreen.html");
     BRS.loadHeaderHTML("html/header.html");
-    /* BRS.loadSidebarHTML("html/sidebar.html");
-    BRS.loadSidebarContextHTML("html/sidebar_context.html");
-
-    BRS.loadPageHTML("html/pages/dashboard.html");
-    BRS.loadPageHTML("html/pages/crowdfund.html");
-    BRS.loadPageHTML("html/pages/transactions.html");
-    BRS.loadPageHTML("html/pages/aliases.html");
-    BRS.loadPageHTML("html/pages/messages.html");
-    BRS.loadPageHTML("html/pages/contacts.html");*/
-    // BRS.loadPageHTML("html/pages/asset_exchange.html");
-    //注释
-    /* BRS.loadPageHTML("html/pages/settings.html");
-    BRS.loadPageHTML("html/pages/peers.html");
-    BRS.loadPageHTML("html/pages/dgs.html");
-    BRS.loadPageHTML("html/pages/blocks.html");
-    BRS.loadModalHTML("html/modals/account.html");
-    BRS.loadModalHTML("html/modals/alias.html");*/
 
     BRS.loadModalHTML("html/modals/asset.html");
 
     //注释
-    /* BRS.loadModalHTML("html/modals/at_create.html");
-    BRS.loadModalHTML("html/modals/block_info.html");
-    BRS.loadModalHTML("html/modals/brs.html");
-    BRS.loadModalHTML("html/modals/contact.html");
-    BRS.loadModalHTML("html/modals/crowd_fund_project.html");
-    BRS.loadModalHTML("html/modals/deployCrowd.html");
-    BRS.loadModalHTML("html/modals/dgs.html");
-    BRS.loadModalHTML("html/modals/dividends.html"); 
-    BRS.loadModalHTML("html/modals/escrow.html");
-    BRS.loadModalHTML("html/modals/messages_decrypt.html");
-    BRS.loadModalHTML("html/modals/raw_transaction.html");*/
     BRS.loadModalHTML("html/modals/request_burst_qr.html");
     BRS.loadModalHTML("html/modals/reward_assignment.html");
     BRS.loadModalHTML("html/modals/send_message.html");
-    /*  BRS.loadModalHTML("html/modals/send_money.html");
-    BRS.loadModalHTML("html/modals/subscription.html");
-    BRS.loadModalHTML("html/modals/token.html");
-    BRS.loadModalHTML("html/modals/transaction_info.html");
-    BRS.loadModalHTML("html/modals/transaction_operations.html");
-    BRS.loadModalHTML("html/modals/user_info.html");
-    BRS.loadModalHTML("html/modals/sign_message.html"); */
   </script>
 
   <script>
@@ -892,17 +522,6 @@
           })
         })
       }
-      /* var url1 = "http://wallet.alita.services:8125/burst?requestType=getAllAssets";
-      $.get(url1, function (data) {
-        dataName = eval('(' + data + ')').assets;
-        dataName.forEach(item => {
-          var opt = document.createElement('option');
-          opt.appendChild(document.createTextNode(item.name));
-          opt.value = item.asset;
-          sel.appendChild(opt);
-          // sel.append(opt);
-        })
-      }) */
 
 
 
@@ -936,7 +555,7 @@
         assetPasswords = '';
       var url2 = "http://wallet.alita.services:8125/burst?requestType=sendMoney";
       var url3 = "http://wallet.alita.services:8125/burst?requestType=transferAsset";
-      // asset_exchange_liquidity.style.display = "none";
+      asset_exchange_liquidity.style.display = "none";
 
       //异步获取
       setInterval(function () {
@@ -1023,10 +642,7 @@
 
       //点击addliquid调用接口
       liquidity.onclick = function () {
-        // console.log(content, issues_names, contracts, publicKeys);
-        // sendMoney(issues_names, contracts, publicKeys);
         sendMoney(issues_names, contracts, assetPasswords);
-        // transfer(content, issues_names, contracts, publicKeys);
         transfer(content, issues_names, contracts, assetPasswords);
       }
 
@@ -1045,7 +661,6 @@
             secretPhrase: val4
           },
           success: function (result) {
-            // console.log(result);
 
           },
           error: function (xhr, status, p3, p4) {
